@@ -485,11 +485,41 @@ function combatAuto(rounds=8){let c=0;while(combatState&&state.alive&&c<rounds){
 
 function chooseSpecialization(){if(state.flags.specialization)return;openModal({title:"修行专精",sub:"立道之始",body:"你已在宗门站稳脚跟,可择一条专精之路。",choices:[{label:"剑修",hint:"攻击提升,历练收益更高",action:()=>{state.flags.specialization="剑";state.atk=Math.floor(state.atk*1.12);log("special","※ 你立志剑修,日日问剑青云台。攻击小幅提升。");closeModal();render()}},{label:"体修",hint:"气血提升,更耐打",action:()=>{state.flags.specialization="体";state.maxHp=Math.floor(state.maxHp*1.18);state.hp=state.maxHp;log("special","※ 你转修体魄,筋骨如铁。气血上限提升。");closeModal();render()}},{label:"丹修",hint:"炼丹奇遇更高",action:()=>{state.flags.specialization="丹";addItem(state,"凝神丹",1);log("special","※ 你兼修丹道,对灵草药性更敏锐。");closeModal();render()}},{label:"器修",hint:"更易获得装备",action:()=>{state.flags.specialization="器";addItem(state,"低阶灵草",2);log("special","※ 你钻研炼器,对法器结构了然于心。");closeModal();render()}},{label:"医修",hint:"道心与恢复更稳",action:()=>{state.flags.specialization="医";state.daoHeart=Math.min(100,state.daoHeart+8);addItem(state,"回春丹",1);log("special","※ 你习得医道,可疗人亦可自疗。");closeModal();render()}}]})}
 
-function triggerStoryEvents(){if(!state.alive)return;const f=state.flags.epochEvents||(state.flags.epochEvents={});if(state.age>=18&&!state.flags.specialization){chooseSpecialization();return}if(state.realm>=1&&!f.sectTournament){f.sectTournament=true;const win=chance(55+state.daoHeart/3);if(win){state.spiritStones+=300;state.exp+=180;log("special","※ 宗门大比开启,你连胜三场夺得前十,获灵石300与额外修为。")}else{state.exp+=80;log("","※ 宗门大比中你惜败于强敌,却也获益良多。")}}if(state.realm>=2&&!f.tombRaid){f.tombRaid=true;const loss=chance(30);if(loss){state.hp=Math.max(1,state.hp-Math.floor(state.maxHp*0.2));log("bad","※ 你与道友共探古墓,机关骤发,虽脱险却负伤而归。") }else{addItem(state,"玉简",1);state.spiritStones+=500;log("mystic","※ 古墓团队探险大获成功,你得上古玉简与灵石。")}}if(state.age>=40&&!f.demonInvasion){f.demonInvasion=true;const win=chance(50+state.realm*8);if(win){state.daoHeart=Math.min(100,state.daoHeart+6);state.exp+=240;log("special","※ 魔修入侵青云山地界,你随宗门迎战得胜,声名渐起。") }else{state.hp=Math.max(1,state.hp-Math.floor(state.maxHp*0.25));log("bad","※ 魔修入侵之战惨烈,你虽生还却身负重伤。")}}if(state.realm>=3&&!f.secretRealm){f.secretRealm=true;log("mystic","※ 天地异象突起,大型秘境开启。诸宗争渡,一个纪元级大事件正拉开序幕。")}}
+function triggerStoryEvents(){if(!state.alive)return;const f=state.flags.epochEvents||(state.flags.epochEvents={});
+  if(state.age>=18&&!state.flags.specialization){chooseSpecialization();return}
+  if(state.realm>=1&&!f.sectTournament){f.sectTournament=true;const win=chance(55+state.daoHeart/3);if(win){state.spiritStones+=300;state.exp+=180;log("special","※ 宗门大比开启,你连胜三场夺得前十,获灵石300与额外修为。")}else{state.exp+=80;log("","※ 宗门大比中你惜败于强敌,却也获益良多。")}}
+  if(state.realm>=2&&!f.tombRaid){f.tombRaid=true;const loss=chance(30);if(loss){state.hp=Math.max(1,state.hp-Math.floor(state.maxHp*0.2));log("bad","※ 你与道友共探古墓,机关骤发,虽脱险却负伤而归。") }else{addItem(state,"玉简",1);state.spiritStones+=500;log("mystic","※ 古墓团队探险大获成功,你得上古玉简与灵石。")}}
+  if(state.age>=35&&!f.mainLine1){f.mainLine1=true;log("special","※【主线·魔潮前夜】边境烽火频传,青云山召集亲传与内门弟子布防。")}
+  if(state.age>=40&&!f.demonInvasion){f.demonInvasion=true;const win=chance(50+state.realm*8);if(win){state.daoHeart=Math.min(100,state.daoHeart+6);state.exp+=240;log("special","※【主线·魔修入侵】你随宗门迎战得胜,声名渐起。") }else{state.hp=Math.max(1,state.hp-Math.floor(state.maxHp*0.25));log("bad","※【主线·魔修入侵】血战惨烈,你虽生还却身负重伤。")}}
+  if(state.age>=45&&!f.mainLine2){f.mainLine2=true;openModal({title:"主线抉择",sub:"魔潮余烬",body:"大战之后,宗门需要人手。你将如何选择?",choices:[{label:"镇守山门",hint:"更稳健",action:()=>{state.daoHeart=Math.min(100,state.daoHeart+5);f.path='守山';log('special','※ 你选择镇守山门,护佑一方平安。');closeModal();render()}},{label:"外出追剿",hint:"收益更高风险更高",action:()=>{f.path='追剿';const dmg=Math.floor(state.maxHp*0.12);state.hp=Math.max(1,state.hp-dmg);state.exp+=320;state.spiritStones+=260;log('special',`※ 你率队外出追剿余孽,虽受伤 ${dmg},却缴获颇丰。`);closeModal();render()}}]});return}
+  if(state.realm>=3&&!f.secretRealm){f.secretRealm=true;log("mystic","※【纪元事件】天地异象突起,大型秘境开启。诸宗争渡,一个时代转折点已至。")}
+  if(state.realm>=3&&!f.mainLine3&&f.path){f.mainLine3=true;if(f.path==='守山'){state.daoHeart=Math.min(100,state.daoHeart+8);log('mystic','※【主线续章】你在守山岁月中悟得护道之心,道心大进。')}else{state.exp+=420;addItem(state,'妖丹',2);log('mystic','※【主线续章】你在追剿中夺回魔典残页,修为精进。')}}
+  if(state.realm>=4&&!f.epochFinale){f.epochFinale=true;log('special','※【纪元终章】秘境核心现世,诸宗缔结短暂盟约。你已站在时代洪流中心。')}
+}
 
 function processNpcGrudge(){for(const name in state.npcs){const npc=state.npcs[name],tmpl=NPC_TEMPLATES[name];if(!npc||npc.status!=="alive"||!tmpl||tmpl.isMortal)continue;if(npc.affinity<=10&&chance(12)){const dmg=Math.max(1,Math.floor(state.maxHp*0.08));state.hp=Math.max(1,state.hp-dmg);state.spiritStones=Math.max(0,state.spiritStones-80);log("bad",`※ ${name} 因旧怨暗中报复,你损失灵石80并受伤 ${dmg}。`);break}}}
 
-function actAutoPlay(){openModal({title:"自动推进",sub:"减少重复点击",body:"选择一个自动流程。",choices:[{label:"自动修炼3年",hint:"12季自动修炼",action:()=>{closeModal();for(let i=0;i<12&&state.alive;i++)actCultivate();}},{label:"自动历练2年",hint:"8季自动历练",action:()=>{closeModal();for(let i=0;i<8&&state.alive;i++)actAdventure();}},{label:"自动刷当前故人",hint:"连续互动6次",action:()=>{const target=Object.keys(state.npcs).find(n=>state.npcs[n].status==='alive'&&NPC_TEMPLATES[n].location===state.location);if(!target){toast('此地暂无可互动故人');return}closeModal();for(let i=0;i<6&&state.alive;i++)npcChat(target);}},{label:"取消",hint:"",action:()=>{closeModal();render()}}]})}
+function runAutoPlan(years,plan){
+  const actions=[];
+  for(let y=0;y<years;y++)for(const p of plan){for(let i=0;i<p.seasons;i++)actions.push(p.action)}
+  const maxSteps=Math.min(actions.length,400);
+  for(let i=0;i<maxSteps&&state.alive;i++){
+    if(actions[i]==='cultivate')actCultivate();
+    else if(actions[i]==='adventure')actAdventure();
+    else if(actions[i]==='social'){const target=Object.keys(state.npcs).find(n=>state.npcs[n].status==='alive'&&NPC_TEMPLATES[n].location===state.location);if(target)npcChat(target);else actCultivate();}
+  }
+}
+
+function actAutoPlay(){
+  const html=`<div style="font-size:12px;color:#8b7d5c;line-height:1.8;">
+  自动推进年限:<input id="autoYears" type="number" min="1" max="30" value="3" style="width:64px;margin-left:6px;background:#111;color:#e8d8b0;border:1px solid #6b5d3c;padding:2px 6px;"> 年<br>
+  每年行动配比:<br>
+  修炼季数 <input id="autoCult" type="number" min="0" max="4" value="2" style="width:52px;background:#111;color:#e8d8b0;border:1px solid #6b5d3c;padding:2px 6px;"> +
+  历练季数 <input id="autoAdv" type="number" min="0" max="4" value="1" style="width:52px;background:#111;color:#e8d8b0;border:1px solid #6b5d3c;padding:2px 6px;"> +
+  社交季数 <input id="autoSoc" type="number" min="0" max="4" value="1" style="width:52px;background:#111;color:#e8d8b0;border:1px solid #6b5d3c;padding:2px 6px;">
+  <div style="margin-top:6px;color:#6b5d3c;">提示:三项总和建议=4(一年四季)。若不等于4将自动归一到4季。</div></div>`;
+  openModal({title:"自动推进",sub:"自定义年限与行动",body:"",html,choices:[{label:"开始自动推进",hint:"按设定循环",action:()=>{const years=Math.max(1,Math.min(30,parseInt(document.getElementById('autoYears').value||'3',10)));let c=Math.max(0,parseInt(document.getElementById('autoCult').value||'0',10));let a=Math.max(0,parseInt(document.getElementById('autoAdv').value||'0',10));let so=Math.max(0,parseInt(document.getElementById('autoSoc').value||'0',10));let total=c+a+so;if(total<=0){toast('至少选择1季行动');return}const scale=4/total;c=Math.max(0,Math.round(c*scale));a=Math.max(0,Math.round(a*scale));so=Math.max(0,4-c-a);const plan=[];if(c>0)plan.push({action:'cultivate',seasons:c});if(a>0)plan.push({action:'adventure',seasons:a});if(so>0)plan.push({action:'social',seasons:so});closeModal();runAutoPlan(years,plan);}},{label:"取消",hint:"",action:()=>{closeModal();render()}}]})
+}
 
 // ============== UI - non-blocking save + scroll preserve ==============
 function afterAction(){
