@@ -676,7 +676,16 @@ function renderCombat(){const e=combatState.enemy;const ehpPct=Math.max(0,(e.hp/
 
 function toast(msg){const t=document.createElement("div");t.className="toast";t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2400)}
 
-(async function init(){await loadState();render()})();
+(async function init(){
+  try{
+    await loadState();
+    render();
+  }catch(e){
+    console.error("Init error:",e);
+    state=null;
+    try{render()}catch(_){}
+  }
+})();
 </script>
 </body>
 </html>
