@@ -140,12 +140,12 @@ const ITEMS={"聚灵丹":{type:"pill",desc:"服后修为略增",use:s=>{const g=
 const EQUIP={"桃木剑":{slot:"weapon",atk:8,minRealm:0,desc:"凡品,初学者所用"},"青锋飞剑":{slot:"weapon",atk:35,minRealm:1,desc:"练气期常用法剑"},"玄铁重剑":{slot:"weapon",atk:120,minRealm:2,desc:"筑基期上品法器"},"赤焰剑":{slot:"weapon",atk:480,minRealm:3,desc:"金丹真人佩剑"},"九天玄女剑":{slot:"weapon",atk:2400,minRealm:4,desc:"上古女仙遗剑"},"粗布道袍":{slot:"armor",def:6,minRealm:0,desc:"普通道袍"},"灵丝法袍":{slot:"armor",def:28,minRealm:1,desc:"灵蚕丝织成"},"玄龟甲":{slot:"armor",def:100,minRealm:2,desc:"千年玄龟之甲"},"凤翎仙衣":{slot:"armor",def:400,minRealm:3,desc:"凤凰羽翎所制"},"九霄霓裳":{slot:"armor",def:2000,minRealm:4,desc:"上古仙女道袍"}};
 
 const LOCATIONS={
-"青云山":{name:"青云山",desc:"你修行入门的所在。山门巍峨,灵气盎然。",minRealm:0,enemyTypes:["邪修","入侵者"],events:["sect_quest","insight","oldman","daoist_friend","herbs","stones","pill_find","heart_demon","auction","weapon_find","armor_find","trap","loss","dream","sect_library","longevity_chance"]},
+"青云山":{name:"青云山",desc:"你修行入门的所在。山门巍峨,灵气盎然。",minRealm:0,enemyTypes:["邪修","入侵者"],events:["sect_quest","insight","oldman","daoist_friend","herbs","stones","pill_find","heart_demon","auction","weapon_find","armor_find","trap","loss","dream","sect_library","longevity_chance","sect_rival","dao_heart_trial"]},
 "落霞镇":{name:"落霞镇",desc:"山下的凡人小镇。烟火气息浓郁,鱼龙混杂。",minRealm:0,enemyTypes:["山贼","邪修"],events:["merchant","mortal_help","mortal_quest","loss","mortal_marketplace","mortal_marketplace","pill_find","stones","mortal_orphan"]},
 "百兽林":{name:"百兽林",desc:"妖兽横行的密林,灵草遍地,凶险四伏。",minRealm:0,enemyTypes:["妖兽"],events:["beast","beast","beast","herbs","herbs","herbs","trap","weapon_find","beast_lair","stones","spring"]},
 "灵药峰":{name:"灵药峰",desc:"终年云雾缭绕之地,遍生奇花异草。",minRealm:1,enemyTypes:["妖兽","散修"],events:["herbs","herbs","herbs","spring","insight","key_pill_find","beast","alchemy_find","stones","mystery_pavilion","longevity_chance"]},
 "黑风谷":{name:"黑风谷",desc:"魔修与邪修盘踞之地,杀机暗藏。",minRealm:1,enemyTypes:["邪修","魔修"],events:["beast","beast","trap","loss","heart_demon","weapon_find","key_pill_find","demon_lair","forbidden"]},
-"万妖谷":{name:"万妖谷",desc:"万千妖族的栖息地,妖王盘踞。",minRealm:2,enemyTypes:["妖兽","上古"],events:["beast","beast","beast","beast","herbs","trap","beast_lair","key_pill_find","ancient_beast","stones"]},
+"万妖谷":{name:"万妖谷",desc:"万千妖族的栖息地,妖王盘踞。",minRealm:2,enemyTypes:["妖兽","上古"],events:["beast","beast","beast","beast","herbs","trap","beast_lair","key_pill_find","ancient_beast","stones","sect_rival","dao_heart_trial"]},
 "海外仙岛":{name:"海外仙岛",desc:"传说中浮于海上的仙岛,机缘无数。",minRealm:3,enemyTypes:["上古","妖兽"],events:["spring","insight","oldman","key_pill_find","ancient_ruin","weapon_find","armor_find","dream","mystic_phoenix","longevity_chance"]},
 "九幽冥土":{name:"九幽冥土",desc:"传说中阴气最盛之地,唯有元婴以上方能涉足。",minRealm:3,enemyTypes:["鬼修","上古","魔修"],events:["beast","trap","forbidden","ghost_market","ancient_beast","key_pill_find","heart_demon","dark_treasure"]}
 };
@@ -167,7 +167,7 @@ const ENEMY_POOLS={
 "散修":{1:[{name:"散修筑基",hp:2000,atk:100,def:60,exp:180,drops:[["灵石",100]]}]},
 "入侵者":{0:[{name:"邪修弟子",hp:120,atk:12,def:6,exp:15,drops:[["灵石",20],["聚灵丹",1]]}],
           1:[{name:"血煞罗刹",hp:2800,atk:110,def:55,exp:200,drops:[["灵石",150],["回春丹",1]]}]},
-"上古":{2:[{name:"上古老树妖",hp:18000,atk:570,def:360,exp:1350,drops:[["灵石",600],["高阶灵草",2]]}],
+"上古":{2:[{name:"太古树妖",hp:18000,atk:570,def:360,exp:1350,drops:[["灵石",600],["高阶灵草",2]]}],
         3:[{name:"上古妖王",hp:120000,atk:2700,def:1650,exp:7500,drops:[["灵石",3000],["婴变果",1]]}],
         4:[{name:"上古妖圣",hp:400000,atk:9000,def:6000,exp:30000,drops:[["神化露",1],["灵石",10000]]},{name:"散仙",hp:500000,atk:10000,def:7000,exp:40000,drops:[["渡劫丹",1]]}],
         5:[{name:"九重天劫",hp:2000000,atk:50000,def:30000,exp:200000,drops:[["神化露",3]]},{name:"远古魔头",hp:3000000,atk:55000,def:35000,exp:280000,drops:[["渡劫丹",2]]}]}
@@ -192,9 +192,11 @@ const NPC_TEMPLATES={
 "林若雪":{name:"林若雪",gender:"女",type:"师妹",location:"青云山",isMortal:false,initRealm:0,initStage:2,initAge:14,initLifespan:90,growthRate:0.4,fragility:0.008,desc:"比你晚入门的小师妹,单灵根,活泼黏人。",color:"tag-cultivator",arcs:{30:"林若雪偷偷塞给你一颗自己舍不得吃的聚灵丹,眼睛亮晶晶地看着你。",60:"若雪师妹拉着你的手说:「师姐你以后闭关,可一定要记得回来看我啊。」",90:"若雪鼓起勇气,在你面前郑重发誓:「这一世我都跟着师姐!」"},gifts:{30:["聚灵丹",1],60:["低阶灵草",3],90:["回春丹",2]}},
 "陆景行":{name:"陆景行",gender:"男",type:"同门师兄",location:"青云山",isMortal:false,initRealm:0,initStage:6,initAge:22,initLifespan:100,growthRate:0.85,fragility:0.007,desc:"青云山同辈师兄,剑修,性情冷峻寡言,但心思细腻。",color:"tag-romance",arcs:{30:"陆师兄与你切磋一剑,临走时低声道:「你的剑意,藏着几分让我看不透的东西。」",60:"雨夜,陆景行在山门外等你回来。他说:「我修剑,是想守护一些人。其中也包括你。」",90:"陆景行向你递出一枚同心玉佩:「若你不嫌弃,愿与你一同走完这条修仙路。」"},gifts:{30:["低阶灵草",2],60:["青锋飞剑",1],90:["玉简",1]}},
 "玄阳真人":{name:"玄阳真人",gender:"男",type:"师叔",location:"青云山",isMortal:false,initRealm:2,initStage:2,initAge:180,initLifespan:500,growthRate:0.3,fragility:0.003,desc:"青云山长老,金丹后期修为,平日深居简出。",color:"tag-cultivator",arcs:{30:"玄阳真人偶然指点你一招剑式,颇有收获。",60:"真人将一卷古老玉简交予你:「此乃我年轻时所悟,赠你了。」",90:"玄阳真人正色道:「修仙路漫漫,记住——莫忘初心。」赠你九转还魂丹。"},gifts:{30:["凝神丹",1],60:["玉简",1],90:["九转还魂丹",1]}},
-"阿青":{name:"阿青",gender:"女",type:"凡人挚友",location:"落霞镇",isMortal:true,initRealm:-1,initStage:0,initAge:16,initLifespan:78,growthRate:0,fragility:0,desc:"落霞镇上的凡人姑娘,从你尚为凡人时便相识。",color:"tag-mortal",arcs:{30:"阿青塞给你一只她亲手缝的香囊:「我知道你是仙人了,但这个,你随身带着吧。」",60:"阿青告诉你她要嫁人了。她笑着说:「我比不上你能活几百岁,但我也想好好活完我这一辈子。」",90:"暮年的阿青坐在镇口的老槐树下,握着你的手:「我快走了。你要好好活。替我看看你说过的,那些山山海海。」"},gifts:{30:["低阶灵草",1]}},
-"张姨":{name:"张姨",gender:"女",type:"凡人长辈",location:"落霞镇",isMortal:true,initRealm:-1,initStage:0,initAge:45,initLifespan:70,growthRate:0,fragility:0,desc:"落霞镇茶铺的张姨,待你如亲女儿。",color:"tag-mortal",arcs:{30:"张姨给你煮了一碗热汤面:「孩子,无论你飞多高,记得有人在山下等你。」",60:"张姨拉着你的手哭了:「我家那口子今年走了。仙子,人这一辈子真短啊。」"},gifts:{}},
-"王老板":{name:"王老板",gender:"男",type:"凡人商贾",location:"落霞镇",isMortal:true,initRealm:-1,initStage:0,initAge:38,initLifespan:72,growthRate:0,fragility:0,desc:"落霞镇上的精明商人,与外界修士也多有往来。",color:"tag-mortal",arcs:{30:"王老板偷偷塞给你一袋灵石:「仙子,往后多关照啊。」",60:"王老板请你帮他护送一批货物,事成之后赠你一些好东西。"},gifts:{30:["聚灵丹",1],60:["中阶灵草",2]}},
+"阿青":{name:"阿青",gender:"女",type:"凡人挚友",location:"落霞镇",isMortal:true,initRealm:-1,initStage:0,initAge:16,initLifespan:92,growthRate:0,fragility:0,desc:"落霞镇上的凡人姑娘,从你尚为凡人时便相识。",color:"tag-mortal",arcs:{30:"阿青塞给你一只她亲手缝的香囊:「我知道你是仙人了,但这个,你随身带着吧。」",60:"阿青寄来喜帖:「我与青梅竹马定下婚期。你若有空,一定来喝喜酒。」",90:"暮年的阿青坐在镇口的老槐树下,握着你的手:「我快走了。你要好好活。替我看看你说过的,那些山山海海。」"},gifts:{30:["低阶灵草",1]}},
+"张姨":{name:"张姨",gender:"女",type:"凡人长辈",location:"落霞镇",isMortal:true,initRealm:-1,initStage:0,initAge:45,initLifespan:86,growthRate:0,fragility:0,desc:"落霞镇茶铺的张姨,待你如亲女儿。",color:"tag-mortal",arcs:{30:"张姨给你煮了一碗热汤面:「孩子,无论你飞多高,记得有人在山下等你。」",60:"张姨拉着你的手哭了:「我家那口子今年走了。仙子,人这一辈子真短啊。」"},gifts:{}},
+"王老板":{name:"王老板",gender:"男",type:"凡人商贾",location:"落霞镇",isMortal:true,initRealm:-1,initStage:0,initAge:38,initLifespan:88,growthRate:0,fragility:0,desc:"落霞镇上的精明商人,与外界修士也多有往来。",color:"tag-mortal",arcs:{30:"王老板偷偷塞给你一袋灵石:「仙子,往后多关照啊。」",60:"王老板请你帮他护送一批货物,事成之后赠你一些好东西。"},gifts:{30:["聚灵丹",1],60:["中阶灵草",2]}},
+"柳沉烟":{name:"柳沉烟",gender:"女",type:"药堂执事",location:"青云山",isMortal:false,initRealm:1,initStage:0,initAge:48,initLifespan:260,growthRate:0.55,fragility:0.006,desc:"宗门药堂执事,擅丹药与疗伤。",color:"tag-cultivator",arcs:{30:"柳沉烟教你辨认百草药性。",60:"柳沉烟邀你夜谈丹道,赠你一方药谱。",90:"柳沉烟叹你天资不凡,将私藏丹方传你。"},gifts:{30:["回灵丹",1],60:["凝神丹",1],90:["九转还魂丹",1]}},
+"韩铁山":{name:"韩铁山",gender:"男",type:"外门教习",location:"青云山",isMortal:false,initRealm:0,initStage:8,initAge:35,initLifespan:130,growthRate:0.5,fragility:0.007,desc:"外门体修教习,脾气火爆却护短。",color:"tag-cultivator",arcs:{30:"韩铁山拍你肩膀大笑:‘你这骨头不错!’",60:"韩教习传你一式护体功,让你少走弯路。",90:"韩铁山把压箱底的护身甲借你,说用完再还。"},gifts:{30:["低阶灵草",2],60:["回春丹",1],90:["玄龟甲",1]}},
 "周明月":{name:"周明月",gender:"女",type:"散修道友",location:"灵药峰",isMortal:false,initRealm:1,initStage:3,initAge:60,initLifespan:280,growthRate:0.7,fragility:0.010,desc:"云游四方的散修,与你在灵药峰相识。豁达开朗。",color:"tag-cultivator",arcs:{30:"周明月与你一同采药,临别时道:「修仙路上知己难觅,你算一个。」",60:"明月道友约你共闯一处秘境,所获颇丰。",90:"周明月送你一枚自炼的丹药:「我老了,怕是渡不了下一关。这丹药,给你。」"},gifts:{30:["中阶灵草",2],60:["回春丹",2],90:["金丹妙药",1]}}
 };
 
@@ -213,6 +215,7 @@ function getExpBonus(s){let b=1;if(s.elements.includes("风"))b*=1.15;return b}
 function getFleeBonus(s){return s.elements.includes("风")?30:0}
 function getCritChance(s){return s.elements.includes("暗")?15:0}
 function getRequiredItem(s){if(s.realm===0)return "筑基丹";if(s.realm===1)return "金丹妙药";if(s.realm===2)return "婴变果";if(s.realm===3)return "神化露";if(s.realm===4)return "渡劫丹";return null}
+function getLifeAddWithTalent(s,base){const factor=Math.max(0.7,0.92+(s.rootMult-1)*0.22);return Math.floor(base*factor)}
 
 let state=null,modalStack=[],combatState=null,savePending=false;
 
@@ -242,18 +245,25 @@ function rollSpiritRoot(){const root=pickWeighted(SPIRIT_ROOTS,x=>x.weight);let 
 
 function newGame(name){
   const{root,elements}=rollSpiritRoot();
-  state={version:SAVE_VERSION,name:name||"无名",gender:"女",spiritRoot:root.name,rootMult:root.mult,rootDesc:root.desc,elements,age:16,yearFraction:0,realm:0,stage:0,exp:0,hp:60,maxHp:60,mp:30,maxMp:30,atk:6,def:4,daoHeart:60,maxLifespan:100,spiritStones:60,inventory:{"聚灵丹":3,"回春丹":2},weapon:"桃木剑",armor:"粗布道袍",partner:null,location:"青云山",npcs:{},log:[],flags:{},alive:true,ascended:false};
-  const starter=["苏婉清","林若雪","陆景行","玄阳真人","阿青","张姨","王老板"];
+  state={version:SAVE_VERSION,name:name||"无名",gender:"女",spiritRoot:root.name,rootMult:root.mult,rootDesc:root.desc,elements,age:16,yearFraction:0,realm:0,stage:0,exp:0,hp:60,maxHp:60,mp:30,maxMp:30,atk:6,def:4,daoHeart:60,maxLifespan:100,spiritStones:60,inventory:{"聚灵丹":3,"回春丹":2},weapon:"桃木剑",armor:"粗布道袍",partner:null,location:"青云山",npcs:{},log:[],flags:{openedCeremony:false,specialization:null,epochEvents:{}},socialTicks:0,autoMode:false,alive:true,ascended:false};
+  const starter=["苏婉清","林若雪","陆景行","玄阳真人","柳沉烟","韩铁山","阿青","张姨","王老板"];
   for(const n of starter)initNPC(state,n);
+  state.maxLifespan=Math.floor(96+state.rootMult*10);
   applyRealmStats(state);
   state.hp=state.maxHp;state.mp=state.maxMp;
   log("special",`※ 你出生于落霞镇外的小村,自幼显露${root.name}之资,${elements.length===1?`属${elements[0]}`:`兼具${elements.join("、")}`}灵根。`);
   log("mystic",`「${root.desc}」`);
   log("",`十六岁那年,云游道长拂尘一指,将你引入青云山修行之门。从此,你便是练气期一层的女修了。`);
+  log("special",`※ 入门当夜,青云山举行灵根开坛仪式,天幕垂下五色灵光,群峰钟鼓齐鸣。`);
   log("friend",`※ 你在青云山结识了师姐苏婉清、师妹林若雪、师兄陆景行,及师叔玄阳真人。`);
-  log("friend",`※ 落霞镇上,亦有挚友阿青、长辈张姨、商贾王老板。`);
+  log("friend",`※ 幼时你多病,阿青常背你看郎中;张姨常留你一碗热面;王老板也曾替你家垫过冬粮。`);
+  log("friend",`※ 落霞镇上这些凡人故旧,是你踏上仙途后仍牵挂的人间锚点。`);
   log("",`——修仙路漫漫,由此始。`);
 }
+
+
+function openRootCeremony(){if(state.flags.openedCeremony)return;state.flags.openedCeremony=true;openModal({title:"灵根开坛",sub:"揭示天命",body:"你立于问心台中央,长老命你依次触碰五行灵碑,让灵根自行显化。",choices:[{label:"先触碰金碑",hint:"锋锐之息·偏攻击",action:()=>{state.flags.ceremonyPath="金";log("mystic","金碑震鸣,剑气如潮冲天而起,锋锐之意直入心海。");closeModal();openRootCeremonyStep2();}},{label:"先触碰水碑",hint:"灵动之息·偏道心",action:()=>{state.flags.ceremonyPath="水";log("mystic","水碑泛起千层涟漪,寒雾缭绕你周身,伊人心境渐归澄明。");closeModal();openRootCeremonyStep2();}}]})}
+function openRootCeremonyStep2(){const omen=pickLine(["青铜古钟自鸣三响","云层裂开一线金芒","问心台下灵泉倒涌","护山大阵泛起古篆"]);openModal({title:"灵根显化",sub:"众目所望",body:`${omen}。五碑同震,你的灵根终被照见——${state.spiritRoot}(${state.elements.join("、")})。`,choices:[{label:"接受喝彩",hint:"获得少量修为",action:()=>{const g=35+rand(0,20);state.exp+=g;log("special",`※ 灵根异象映天,你被记入青云山弟子名册。修为 +${g}。`);closeModal();render()}},{label:"静心内观",hint:"道心+3~5",action:()=>{const d=3+rand(0,2);state.daoHeart=Math.min(100,state.daoHeart+d);log("special",`※ 你压下喧嚣内观丹田,道心更稳。道心 +${d}。`);closeModal();render()}}]})}
 
 function initNPC(state,name){const t=NPC_TEMPLATES[name];if(!t)return;state.npcs[name]={name:t.name,realm:t.initRealm,stage:t.initStage,age:t.initAge,maxLifespan:t.initLifespan,affinity:10,arcsTriggered:[],status:"alive",statusReason:"",deathAge:null,metAge:state.age}}
 
@@ -263,7 +273,7 @@ function log(type,text){if(!state)return;state.log.push({type,text,age:state.age
 
 function passSeasons(n,longPassage=false){state.yearFraction+=n;let yearsPassed=0;while(state.yearFraction>=4){state.yearFraction-=4;state.age+=1;yearsPassed+=1}if(yearsPassed>0)updateAllNPCs(yearsPassed,longPassage);if(state.age>=state.maxLifespan&&state.alive){state.alive=false;log("bad",`※ 寿元已尽,你于 ${state.age} 岁那年坐化。修仙路漫漫,未能得道飞升。`)}}
 
-function updateAllNPCs(years,longPassage){for(const name in state.npcs){const npc=state.npcs[name];const tmpl=NPC_TEMPLATES[name];if(!tmpl||npc.status!=="alive")continue;npc.age+=years;if(!tmpl.isMortal&&tmpl.growthRate>0){for(let i=0;i<years;i++){if(chance(tmpl.growthRate*6)){npc.stage+=1;if(npc.stage>=REALMS[npc.realm].stages.length&&npc.realm<REALMS.length-1){if(chance(75)){npc.realm+=1;npc.stage=0;if(longPassage)log("friend",`※ 听闻 ${name} 已突破至 ${realmName(npc.realm,npc.stage)}。`)}else npc.stage=REALMS[npc.realm].stages.length-1}}}}if(longPassage&&tmpl.fragility>0){for(let i=0;i<years;i++){if(chance(tmpl.fragility*100)){const fates=[{reason:"突破时走火入魔陨落",weight:3,status:"dead"},{reason:"渡劫失败陨落",weight:tmpl.initRealm>=2?2:0,status:"dead"},{reason:"与魔修交手时身亡",weight:2,status:"dead"},{reason:"云游远方,再无音讯",weight:3,status:"missing"},{reason:"得道飞升",weight:tmpl.initRealm>=4?2:0,status:"ascended"}].filter(f=>f.weight>0);const fate=pickWeighted(fates,x=>x.weight);npc.status=fate.status;npc.statusReason=fate.reason;npc.deathAge=npc.age;break}}}if(npc.age>=npc.maxLifespan&&npc.status==="alive"){npc.status="dead";npc.statusReason=tmpl.isMortal?"寿终正寝":"寿元已尽";npc.deathAge=npc.age}}}
+function updateAllNPCs(years,longPassage){for(const name in state.npcs){const npc=state.npcs[name];const tmpl=NPC_TEMPLATES[name];if(!tmpl||npc.status!=="alive")continue;npc.age+=years;if(!tmpl.isMortal&&tmpl.growthRate>0){for(let i=0;i<years;i++){if(chance(tmpl.growthRate*6)){npc.stage+=1;if(npc.stage>=REALMS[npc.realm].stages.length&&npc.realm<REALMS.length-1){if(chance(75)){npc.realm+=1;npc.stage=0;npc.maxLifespan+=REALMS[npc.realm].lifeAdd;if(chance(45)){const keys=Object.keys(LOCATIONS).filter(k=>npc.realm>=LOCATIONS[k].minRealm);if(keys.length>0)tmpl.location=keys[rand(0,keys.length-1)]}if(longPassage)log("friend",`※ 听闻 ${name} 已突破至 ${realmName(npc.realm,npc.stage)},寿元随之增长。`)}else npc.stage=REALMS[npc.realm].stages.length-1}}if(chance(8)){const keys=Object.keys(LOCATIONS).filter(k=>npc.realm>=LOCATIONS[k].minRealm);if(keys.length>0)tmpl.location=keys[rand(0,keys.length-1)]}if(chance(5)&&npc.realm>=LOCATIONS[state.location].minRealm)tmpl.location=state.location}}if(longPassage&&tmpl.fragility>0){for(let i=0;i<years;i++){if(chance(tmpl.fragility*100)){const fates=[{reason:"突破时走火入魔陨落",weight:3,status:"dead"},{reason:"渡劫失败陨落",weight:tmpl.initRealm>=2?2:0,status:"dead"},{reason:"与魔修交手时身亡",weight:2,status:"dead"},{reason:"云游远方,再无音讯",weight:3,status:"missing"},{reason:"得道飞升",weight:tmpl.initRealm>=4?2:0,status:"ascended"}].filter(f=>f.weight>0);const fate=pickWeighted(fates,x=>x.weight);npc.status=fate.status;npc.statusReason=fate.reason;npc.deathAge=npc.age;break}}}if(npc.age>=npc.maxLifespan&&npc.status==="alive"){npc.status="dead";npc.statusReason=tmpl.isMortal?"寿终正寝":"寿元已尽";npc.deathAge=npc.age}}}
 
 function reportNPCChangesAfterSeclusion(snapshot){for(const name in state.npcs){const npc=state.npcs[name];const before=snapshot[name];if(!before||before.status!=="alive"||npc.status==="alive")continue;const tmpl=NPC_TEMPLATES[name];const close=npc.affinity>=60;if(npc.status==="dead"){if(tmpl.isMortal)log("sad",`※ 你出关后,行至落霞镇,得知 ${name} 已${close?"于数年前":""}${npc.statusReason},享年 ${npc.deathAge} 岁。${close?"你站在熟悉的小巷口,久久无言。":""}`);else log("sad",`※ 出关后听闻,${name}已${npc.statusReason},享年 ${npc.deathAge} 岁。${close?"故人已矣,唯余怅然。":""}`)}else if(npc.status==="missing")log("sad",`※ 出关后才知,${name}早已${npc.statusReason}。${close?"再无相见之日。":""}`);else if(npc.status==="ascended")log("special",`※ 出关后听闻,${name}已${npc.statusReason}!金光冲天而去。`)}}
 
@@ -328,12 +338,12 @@ function confirmSeclude(years){
 function doSeclude(years){
   const snapshot={};for(const n in state.npcs)snapshot[n]={...state.npcs[n]};
   const deviateChance=Math.max(2,25-state.daoHeart/4);
-  if(chance(deviateChance)){const dmg=Math.floor(state.maxHp*0.4);state.hp=Math.max(1,state.hp-dmg);state.daoHeart=Math.max(0,state.daoHeart-10);const partialGain=Math.floor((4+rand(0,4))*4*0.3*state.rootMult*(1+state.realm*0.5)*getExpBonus(state));state.exp+=partialGain;passSeasons(years*4,true);log("bad",`※ 闭关 ${years} 载,不慎走火入魔!经脉受损 ${dmg},道心动摇,修为仅得 ${partialGain} 点。`);reportNPCChangesAfterSeclusion(snapshot);afterAction();return}
+  if(chance(deviateChance)){const dmg=Math.floor(state.maxHp*0.4);state.hp=Math.max(1,state.hp-dmg);state.daoHeart=Math.max(0,state.daoHeart-10);const partialGain=Math.floor((4+rand(0,4))*4.8*0.3*state.rootMult*(1+state.realm*0.5)*getExpBonus(state));state.exp+=partialGain;passSeasons(years*4,true);log("bad",`※ 闭关 ${years} 载,不慎走火入魔!经脉受损 ${dmg},道心动摇,修为仅得 ${partialGain} 点。`);reportNPCChangesAfterSeclusion(snapshot);afterAction();return}
   let totalExpGained=0,breakthroughs=[],realmJumps=[],failedBreakthroughs=0;
   for(let y=0;y<years;y++){
     if(!state.alive)break;
     const realmMult=1+state.realm*0.5;
-    const yearGain=Math.floor((10+rand(0,8))*4*state.rootMult*realmMult*getExpBonus(state));
+    const yearGain=Math.floor((10+rand(0,8))*4.8*state.rootMult*realmMult*getExpBonus(state));
     state.exp+=yearGain;totalExpGained+=yearGain;
     passSeasons(4,true);
     if(!state.alive)break;
@@ -350,7 +360,7 @@ function doSeclude(years){
       rate=Math.max(15,Math.floor(rate));
       if(isRealmJump&&requiredItem)removeItem(state,requiredItem,1);
       if(chance(rate)){
-        if(isRealmJump){state.realm+=1;state.stage=0;state.maxLifespan+=REALMS[state.realm].lifeAdd;realmJumps.push(REALMS[state.realm].name)}
+        if(isRealmJump){state.realm+=1;state.stage=0;state.maxLifespan+=getLifeAddWithTalent(state,REALMS[state.realm].lifeAdd);realmJumps.push(REALMS[state.realm].name)}
         else{state.stage+=1;breakthroughs.push(getRealmName(state))}
         state.exp=0;applyRealmStats(state);checkSectGifts();
       }else{state.exp=Math.floor(state.exp*0.6);state.daoHeart=Math.max(0,state.daoHeart-5);failedBreakthroughs++;break}
@@ -415,14 +425,14 @@ function actBreakthrough(){
     if(isRealmJump&&requiredItem&&!hasItem)choices.push({label:`突破(缺少${requiredItem})`,hint:"无法尝试",action:()=>toast(`需 ${requiredItem}`)});
     else{
       const finalRate=state.spiritStones>=stoneCost?rate+5:rate;
-      choices.push({label:state.spiritStones>=stoneCost?`消耗灵石突破(${finalRate}%)`:`突破(灵石不足,${rate}%)`,hint:state.spiritStones>=stoneCost?"":"灵石不够,无加成",action:()=>{if(state.spiritStones>=stoneCost)state.spiritStones-=stoneCost;if(isRealmJump&&requiredItem)removeItem(state,requiredItem,1);closeModal();attemptBreakthrough(state.spiritStones>=0?finalRate:rate)}});
+      choices.push({label:`稳扎稳打突破(${rate}%)`,hint:"不消耗灵石",action:()=>{if(isRealmJump&&requiredItem)removeItem(state,requiredItem,1);closeModal();attemptBreakthrough(rate)}});choices.push({label:state.spiritStones>=stoneCost?`消耗灵石突破(${finalRate}%)`:`突破(灵石不足,${rate}%)`,hint:state.spiritStones>=stoneCost?"":"灵石不够,无加成",action:()=>{const canPay=state.spiritStones>=stoneCost;if(canPay)state.spiritStones-=stoneCost;if(isRealmJump&&requiredItem)removeItem(state,requiredItem,1);closeModal();attemptBreakthrough(canPay?finalRate:rate)}});
     }
     choices.push({label:"再修炼些时日",hint:"",action:()=>{closeModal();render()}});
   }
   openModal({title:"突 破",sub:"修行大关",body:bodyText,choices});
 }
 
-function attemptBreakthrough(rate){passSeasons(2);if(chance(rate)){const isRealmJump=state.stage>=REALMS[state.realm].stages.length-1;if(isRealmJump){state.realm+=1;state.stage=0;state.maxLifespan+=REALMS[state.realm].lifeAdd;log("special",`※※ 你成功突破,晋入 ${REALMS[state.realm].name}!寿元 +${REALMS[state.realm].lifeAdd}。`)}else{state.stage+=1;log("special",`※ 你成功突破,进境至 ${getRealmName(state)}!`)}state.exp=0;applyRealmStats(state);state.hp=state.maxHp;state.mp=state.maxMp;checkSectGifts()}else{const lost=Math.floor(state.exp*0.3);state.exp-=lost;state.daoHeart=Math.max(0,state.daoHeart-8);const dmg=Math.floor(state.maxHp*0.3);state.hp=Math.max(1,state.hp-dmg);log("bad",`※ 突破失败!经脉受损 ${dmg},损失修为 ${lost},道心受挫。`)}afterAction()}
+function attemptBreakthrough(rate){passSeasons(2);if(chance(rate)){const isRealmJump=state.stage>=REALMS[state.realm].stages.length-1;if(isRealmJump){state.realm+=1;state.stage=0;state.maxLifespan+=getLifeAddWithTalent(state,REALMS[state.realm].lifeAdd);log("special",`※※ 你成功突破,晋入 ${REALMS[state.realm].name}!寿元 +${REALMS[state.realm].lifeAdd}。`)}else{state.stage+=1;log("special",`※ 你成功突破,进境至 ${getRealmName(state)}!`)}state.exp=0;applyRealmStats(state);state.hp=state.maxHp;state.mp=state.maxMp;checkSectGifts()}else{const lost=Math.floor(state.exp*0.3);state.exp-=lost;state.daoHeart=Math.max(0,state.daoHeart-8);const dmg=Math.floor(state.maxHp*0.3);state.hp=Math.max(1,state.hp-dmg);log("bad",`※ 突破失败!经脉受损 ${dmg},损失修为 ${lost},道心受挫。`)}afterAction()}
 
 function attemptAscension(){passSeasons(2);const score=state.daoHeart+Math.min(50,state.exp/10000);if(chance(score)){state.alive=false;state.ascended=true;log("special","※※※ 九重天劫尽数渡过!金光自天而降,将你笼罩——");log("mystic","※ 你身周浮现仙文道纹,肉身化虹,破空而去。");log("special",`※ 历尽 ${state.age-16} 载修行,你终成仙道,飞升上界。`)}else{state.alive=false;log("bad","※ 天劫无情,你终究未能渡过最后一击……");log("bad",`※ 修行 ${state.age-16} 载,魂飞魄散于劫雷之中。`)}afterAction()}
 
@@ -434,12 +444,16 @@ function visitNPC(name){const npc=state.npcs[name],tmpl=NPC_TEMPLATES[name];if(!
 
 function hasGiftItem(){return ["低阶灵草","中阶灵草","高阶灵草","聚灵丹","回春丹","凝神丹"].some(it=>state.inventory[it])}
 
-function npcChat(name){const npc=state.npcs[name],tmpl=NPC_TEMPLATES[name];const gain=3+rand(0,3);const oldAff=npc.affinity;npc.affinity=Math.min(100,npc.affinity+gain);passSeasons(1);log("friend",`你与 ${name} 闲谈论道,相谈甚欢。好感 +${gain}。`);if(!tmpl.isMortal)state.daoHeart=Math.min(100,state.daoHeart+1);triggerNPCArcs(name,oldAff,npc.affinity);afterAction()}
-function npcCultivate(name){const npc=state.npcs[name],tmpl=NPC_TEMPLATES[name];const oldAff=npc.affinity;npc.affinity=Math.min(100,npc.affinity+2);if(!tmpl.isMortal&&npc.realm>state.realm){const gain=Math.floor((15+rand(0,15))*state.rootMult*(npc.realm-state.realm+1)*getExpBonus(state));state.exp+=gain;log("friend",`${name}指点你修行片刻,修为大进 ${gain} 点。好感 +2。`)}else if(!tmpl.isMortal){const gain=Math.floor((8+rand(0,8))*state.rootMult*getExpBonus(state));state.exp+=gain;log("friend",`你与 ${name} 切磋一番,修为增长 ${gain} 点。好感 +2。`)}else{log("friend",`你与 ${name} 在镇上散步谈天,颇感放松。好感 +2。`);state.daoHeart=Math.min(100,state.daoHeart+2)}passSeasons(1);triggerNPCArcs(name,oldAff,npc.affinity);checkSectGifts();afterAction()}
 
-function npcGift(name){const npc=state.npcs[name];const giftItems=[{it:"低阶灵草",aff:5,cond:!!state.inventory["低阶灵草"]},{it:"中阶灵草",aff:10,cond:!!state.inventory["中阶灵草"]},{it:"高阶灵草",aff:15,cond:!!state.inventory["高阶灵草"]},{it:"聚灵丹",aff:8,cond:!!state.inventory["聚灵丹"]},{it:"回春丹",aff:10,cond:!!state.inventory["回春丹"]},{it:"凝神丹",aff:12,cond:!!state.inventory["凝神丹"]}].filter(g=>g.cond);if(state.spiritStones>=50)giftItems.push({it:"灵石50",aff:6,isStones:true});if(giftItems.length===0){toast("无可赠之物");return}openModal({title:"赠 礼",sub:name,body:"选一样赠予对方:",choices:[...giftItems.map(g=>({label:`${g.it} (好感 +${g.aff})`,hint:"",action:()=>{if(g.isStones)state.spiritStones-=50;else removeItem(state,g.it,1);const oldAff=npc.affinity;npc.affinity=Math.min(100,npc.affinity+g.aff);passSeasons(1);log("friend",`你赠送 ${name} ${g.it},对方欣然收下。好感 +${g.aff}。`);triggerNPCArcs(name,oldAff,npc.affinity);closeModal();afterAction()}})),{label:"再想想",hint:"",action:()=>{closeModal();render()}}]})}
+function socialSeasonProgress(){state.socialTicks=(state.socialTicks||0)+1;if(state.socialTicks>=3){state.socialTicks=0;passSeasons(1);return true}return false}
+function pickLine(arr){return arr[rand(0,arr.length-1)]}
 
-function triggerNPCArcs(name,oldAff,newAff){const npc=state.npcs[name],tmpl=NPC_TEMPLATES[name];for(const threshold of [30,60,90]){if(oldAff<threshold&&newAff>=threshold){if(npc.arcsTriggered.includes(threshold))continue;npc.arcsTriggered.push(threshold);const arc=tmpl.arcs[threshold];if(arc)log("friend",`※ ${arc}`);const gift=tmpl.gifts[threshold];if(gift){if(gift[0]==="青锋飞剑"&&(!state.weapon||EQUIP[state.weapon].atk<35)){state.weapon="青锋飞剑";log("special",`※ ${name}赠你青锋飞剑!`)}else{addItem(state,gift[0],gift[1]);log("special",`※ ${name}赠你 ${gift[0]} ×${gift[1]}!`)}}if(name==="陆景行"&&threshold===90&&!state.partner){setTimeout(()=>{openModal({title:"道 侣",sub:"心之所向",body:`陆景行向你递出同心玉佩。\n\n你愿与他结为道侣,相携走完这修仙长路吗?`,choices:[{label:"愿意结为道侣",hint:"携手前行",action:()=>{state.partner="陆景行";state.maxLifespan+=30;state.daoHeart=Math.min(100,state.daoHeart+15);log("special","※※ 你与陆景行结为道侣!寿元 +30,道心 +15。");closeModal();render()}},{label:"修仙路漫,不敢承诺",hint:"婉拒之",action:()=>{npc.affinity=Math.max(0,npc.affinity-20);log("sad","你婉拒了他的心意。陆景行神色黯然,转身而去。");closeModal();render()}}]})},100)}}}}
+function npcChat(name){const npc=state.npcs[name],tmpl=NPC_TEMPLATES[name];const gain=3+rand(0,3);const oldAff=npc.affinity;npc.affinity=Math.min(100,npc.affinity+gain);const line=tmpl.isMortal?pickLine([`你陪 ${name} 走过旧街,听她讲起镇上的人情冷暖。`,`你与 ${name} 在茶摊边闲聊许久,伊人笑意温柔。`,`你与 ${name} 一同看暮色落进青瓦巷口,心里安定许多。`]):pickLine([`你与 ${name} 论法至深夜,一句点拨令你豁然。`,`你与 ${name} 对坐松下谈剑,彼此受益。`,`你与 ${name} 交流修途得失,相知更深。`]);const passed=socialSeasonProgress();log("friend",`${line} 好感 +${gain}。${passed?"(三次社交,一季流逝)":""}`);if(!tmpl.isMortal)state.daoHeart=Math.min(100,state.daoHeart+1);triggerNPCArcs(name,oldAff,npc.affinity);afterAction()}
+function npcCultivate(name){const npc=state.npcs[name],tmpl=NPC_TEMPLATES[name];const oldAff=npc.affinity;npc.affinity=Math.min(100,npc.affinity+2);let msg="";if(!tmpl.isMortal&&npc.realm>state.realm){const gain=Math.floor((15+rand(0,15))*state.rootMult*(npc.realm-state.realm+1)*getExpBonus(state));state.exp+=gain;msg=pickLine([`${name} 以高境界心法指点你,修为大进 ${gain} 点。`,`${name} 指你运气走脉,你当场明悟,修为 +${gain}。`])}else if(!tmpl.isMortal){const gain=Math.floor((8+rand(0,8))*state.rootMult*getExpBonus(state));state.exp+=gain;msg=pickLine([`你与 ${name} 切磋三招,修为增长 ${gain} 点。`,`你与 ${name} 共修半日,修为 +${gain}。`])}else{msg=pickLine([`你与 ${name} 在镇上散步谈天,心境舒缓。`,`你与 ${name} 一起逛集市,久违地像个凡人。`]);state.daoHeart=Math.min(100,state.daoHeart+2)}const passed=socialSeasonProgress();log("friend",`${msg} 好感 +2。${passed?"(三次社交,一季流逝)":""}`);triggerNPCArcs(name,oldAff,npc.affinity);checkSectGifts();afterAction()}
+
+function npcGift(name){const npc=state.npcs[name];const giftItems=[{it:"低阶灵草",aff:5,cond:!!state.inventory["低阶灵草"]},{it:"中阶灵草",aff:10,cond:!!state.inventory["中阶灵草"]},{it:"高阶灵草",aff:15,cond:!!state.inventory["高阶灵草"]},{it:"聚灵丹",aff:8,cond:!!state.inventory["聚灵丹"]},{it:"回春丹",aff:10,cond:!!state.inventory["回春丹"]},{it:"凝神丹",aff:12,cond:!!state.inventory["凝神丹"]}].filter(g=>g.cond);if(state.spiritStones>=50)giftItems.push({it:"灵石50",aff:6,isStones:true});if(giftItems.length===0){toast("无可赠之物");return}openModal({title:"赠 礼",sub:name,body:"选一样赠予对方:",choices:[...giftItems.map(g=>({label:`${g.it} (好感 +${g.aff})`,hint:"",action:()=>{if(g.isStones)state.spiritStones-=50;else removeItem(state,g.it,1);const oldAff=npc.affinity;npc.affinity=Math.min(100,npc.affinity+g.aff);const passed=socialSeasonProgress();log("friend",`你赠送 ${name} ${g.it},对方欣然收下。好感 +${g.aff}。${passed?"(三次社交,一季流逝)":""}`);triggerNPCArcs(name,oldAff,npc.affinity);closeModal();afterAction()}})),{label:"再想想",hint:"",action:()=>{closeModal();render()}}]})}
+
+function triggerNPCArcs(name,oldAff,newAff){const npc=state.npcs[name],tmpl=NPC_TEMPLATES[name];for(const threshold of [30,60,90]){if(oldAff<threshold&&newAff>=threshold){if(npc.arcsTriggered.includes(threshold))continue;npc.arcsTriggered.push(threshold);let arc=tmpl.arcs[threshold];if(name==="阿青"&&threshold===60){arc=state.age<=45?"阿青寄来喜帖:「我与青梅竹马定下婚期。你若有空,一定来喝喜酒。」":"阿青来信说,这些年她把日子过得踏实安稳,也终于找到了晚年的依靠。"}if(arc)log("friend",`※ ${arc}`);const gift=tmpl.gifts[threshold];if(gift){if(gift[0]==="青锋飞剑"&&(!state.weapon||EQUIP[state.weapon].atk<35)){state.weapon="青锋飞剑";log("special",`※ ${name}赠你青锋飞剑!`)}else{addItem(state,gift[0],gift[1]);log("special",`※ ${name}赠你 ${gift[0]} ×${gift[1]}!`)}}if(name==="陆景行"&&threshold===90&&!state.partner){setTimeout(()=>{openModal({title:"道 侣",sub:"心之所向",body:`陆景行向你递出同心玉佩。\n\n你愿与他结为道侣,相携走完这修仙长路吗?`,choices:[{label:"愿意结为道侣",hint:"携手前行",action:()=>{state.partner="陆景行";state.maxLifespan+=30;state.daoHeart=Math.min(100,state.daoHeart+15);log("special","※※ 你与陆景行结为道侣!寿元 +30,道心 +15。");closeModal();render()}},{label:"修仙路漫,不敢承诺",hint:"婉拒之",action:()=>{npc.affinity=Math.max(0,npc.affinity-20);log("sad","你婉拒了他的心意。陆景行神色黯然,转身而去。");closeModal();render()}}]})},100)}}}}
 
 const EVENTS={
 "herbs":(s)=>{const tier=s.realm<=1?"低阶灵草":s.realm<=3?"中阶灵草":"高阶灵草";const baseN=1+rand(0,s.realm);const n=s.elements.includes("木")?baseN*2:baseN;addItem(s,tier,n);return{text:`你于山涧寻得 ${tier} ${n} 株${s.elements.includes("木")?"(木属性亲和,所获翻倍)":""}。`,type:"good"}},
@@ -474,17 +488,89 @@ const EVENTS={
 "ancient_ruin":(s)=>{const g=Math.floor((150+rand(0,200)*(s.realm+1))*getExpBonus(s));s.exp+=g;addItem(s,"玉简",1);if(chance(50)){const tier=Math.min(s.realm,4);const armors=Object.entries(EQUIP).filter(([k,v])=>v.slot==="armor"&&v.minRealm===tier);if(armors.length>0){const[name,info]=armors[0];if(!s.armor||EQUIP[s.armor].def<info.def){s.armor=name;return{text:`你于上古遗迹中得玉简一卷,并寻得一件 ${name}!修为 +${g}。`,type:"special"}}}}return{text:`你于上古遗迹中参悟,得玉简一卷,修为 +${g}。`,type:"special"}},
 "mystic_phoenix":(s)=>{s.daoHeart=Math.min(100,s.daoHeart+12);const g=Math.floor((250+rand(0,250)*(s.realm+1))*getExpBonus(s));s.exp+=g;addItem(s,"驻颜丹",1);return{text:`你在仙岛之上,亲见一只朱羽凤凰自云中飞过。心境澄澈,修为 +${g},道心 +12,意外得驻颜丹一枚。`,type:"mystic"}},
 "ghost_market":(s)=>{const cost=200+s.realm*300;if(s.spiritStones<cost)return{text:"九幽冥土的鬼市灯火幽幽,你囊中不足,未敢久留。",type:""};return{text:`鬼市中,一阴森老者兜售一颗『阴煞丹』。开价 ${cost} 灵石。`,type:"",choices:[{label:`购买(${cost}灵石)`,hint:"未知风险",do:()=>{s.spiritStones-=cost;if(chance(60)){const g=Math.floor((250+rand(0,250)*(s.realm+1))*getExpBonus(s));s.exp+=g;return{text:`阴煞丹入腹,修为暴增 ${g} 点!`,type:"special"}}else{s.daoHeart=Math.max(0,s.daoHeart-15);const dmg=Math.floor(s.maxHp*0.3);s.hp=Math.max(1,s.hp-dmg);return{text:`阴煞丹竟有副作用,道心受损 15,气血损 ${dmg}!`,type:"bad"}}}},{label:"不买",hint:"",do:()=>({text:"你心生警惕,匆匆离开鬼市。",type:""})}]}},
-"dark_treasure":(s)=>{if(chance(50)){addItem(s,"高阶灵草",2);addItem(s,"妖丹",1);s.spiritStones+=500;return{text:`你于阴气浓郁处寻得一处宝藏,得灵草、妖丹及大量灵石!`,type:"special"}}else{const dmg=Math.floor(s.maxHp*0.3);s.hp=Math.max(1,s.hp-dmg);return{text:`所谓宝藏竟是邪修陷阱,你受阴气侵袭,损血 ${dmg}。`,type:"bad"}}}
+"dark_treasure":(s)=>{if(chance(50)){addItem(s,"高阶灵草",2);addItem(s,"妖丹",1);s.spiritStones+=500;return{text:`你于阴气浓郁处寻得一处宝藏,得灵草、妖丹及大量灵石!`,type:"special"}}else{const dmg=Math.floor(s.maxHp*0.3);s.hp=Math.max(1,s.hp-dmg);return{text:`所谓宝藏竟是邪修陷阱,你受阴气侵袭,损血 ${dmg}。`,type:"bad"}}},
+"sect_rival":(s)=>{const g=Math.floor((30+rand(0,40)*(s.realm+1))*getExpBonus(s));s.exp+=g;return{text:`你遇到其他门派弟子切磋问道,互换见闻。修为 +${g}。`,type:"friend"}},
+"dao_heart_trial":(s)=>{if(chance(60+s.daoHeart/5)){s.daoHeart=Math.min(100,s.daoHeart+5);return{text:"你在心劫幻境中守住本心,道心 +5。",type:"mystic"}}const lose=Math.max(1,Math.floor(s.exp*0.04));s.exp-=lose;return{text:`心劫未稳,你迷失片刻,损失修为 ${lose}。`,type:"bad"}}
 };
 
 function openCombat(enemy){combatState={enemy,turn:0,log:[]};renderCombat()}
 function combatPlayerTurn(action,item){const e=combatState.enemy;const playerAtk=getCurrentAtk(state);const playerDef=getCurrentDef(state);let playerActed=false;if(action==="attack"){let dmg=Math.max(1,playerAtk-e.def+rand(-5,5));if(chance(getCritChance(state))){dmg=Math.floor(dmg*2);combatState.log.push({t:"special",x:`暗影涌动,你的一击造成暴击!`})}e.hp-=dmg;combatState.log.push({t:"good",x:`你出剑攻击 ${e.name},造成 ${dmg} 伤害。`});playerActed=true}else if(action==="skill"){const cost=Math.floor(state.maxMp*0.3);if(state.mp<cost){combatState.log.push({t:"bad",x:`法力不足!`});renderCombat();return}state.mp-=cost;const dmg=Math.max(1,Math.floor(playerAtk*getSkillMult(state))-e.def+rand(-5,10));e.hp-=dmg;combatState.log.push({t:"special",x:`你催动法术,法力消耗 ${cost},对 ${e.name} 造成 ${dmg} 伤害!`});playerActed=true}else if(action==="item"){if(!ITEMS[item]||!ITEMS[item].use){combatState.log.push({t:"bad",x:`${item} 无法在此使用。`});renderCombat();return}if(!removeItem(state,item,1)){combatState.log.push({t:"bad",x:`没有 ${item}。`});renderCombat();return}const msg=ITEMS[item].use(state);combatState.log.push({t:"good",x:`服用 ${item}:${msg}`});playerActed=true}else if(action==="flee"){const fleeChance=50+state.daoHeart/4+getFleeBonus(state);if(chance(fleeChance)){combatState.log.push({t:"",x:`你拼力遁走,脱离了战场。`});log("",`你在与 ${e.name} 的交手中遁走。`);combatState=null;closeModal();afterAction();return}else{combatState.log.push({t:"bad",x:`遁走失败!`});playerActed=true}}if(e.hp<=0){let txt=`※ 你击败了 ${e.name}!获得修为 ${e.exp}。`;state.exp+=Math.floor(e.exp*getExpBonus(state));if(e.drops){e.drops.forEach(([item,count])=>{if(item==="灵石"){state.spiritStones+=count;txt+=` 灵石 ×${count}。`}else{addItem(state,item,count);txt+=` ${item} ×${count}。`}})}log("combat",txt);combatState=null;closeModal();checkSectGifts();afterAction();return}if(playerActed){const dmg=Math.max(1,e.atk-playerDef+rand(-5,5));state.hp-=dmg;combatState.log.push({t:"bad",x:`${e.name} 反击!你受到 ${dmg} 伤害。`});if(state.hp<=0){state.hp=0;if(state.inventory["回春丹"]&&state.inventory["回春丹"]>0){removeItem(state,"回春丹",1);state.hp=Math.floor(state.maxHp*0.5);combatState.log.push({t:"special",x:`命悬一线之际,回春丹自动炸开,将你救回半数气血!`})}else{state.alive=false;log("bad",`※ 你战死于 ${e.name} 之手。修仙路至此终结。`);combatState=null;closeModal();afterAction();return}}}combatState.turn++;renderCombat()}
+function combatAuto(rounds=8){let c=0;while(combatState&&state.alive&&c<rounds){if(state.mp>=Math.floor(state.maxMp*0.3))combatPlayerTurn("skill");else combatPlayerTurn("attack");c++}}
+
+
+function chooseSpecialization(){if(state.flags.specialization)return;openModal({title:"修行专精",sub:"立道之始",body:"你已在宗门站稳脚跟,可择一条专精之路。",choices:[{label:"剑修",hint:"攻击提升,历练收益更高",action:()=>{state.flags.specialization="剑";state.atk=Math.floor(state.atk*1.12);log("special","※ 你立志剑修,日日问剑青云台。攻击小幅提升。");closeModal();render()}},{label:"体修",hint:"气血提升,更耐打",action:()=>{state.flags.specialization="体";state.maxHp=Math.floor(state.maxHp*1.18);state.hp=state.maxHp;log("special","※ 你转修体魄,筋骨如铁。气血上限提升。");closeModal();render()}},{label:"丹修",hint:"炼丹奇遇更高",action:()=>{state.flags.specialization="丹";addItem(state,"凝神丹",1);log("special","※ 你兼修丹道,对灵草药性更敏锐。");closeModal();render()}},{label:"器修",hint:"更易获得装备",action:()=>{state.flags.specialization="器";addItem(state,"低阶灵草",2);log("special","※ 你钻研炼器,对法器结构了然于心。");closeModal();render()}},{label:"医修",hint:"道心与恢复更稳",action:()=>{state.flags.specialization="医";state.daoHeart=Math.min(100,state.daoHeart+8);addItem(state,"回春丹",1);log("special","※ 你习得医道,可疗人亦可自疗。");closeModal();render()}}]})}
+
+function triggerStoryEvents(){if(!state.alive)return;const f=state.flags.epochEvents||(state.flags.epochEvents={});
+  if(state.age>=18&&!state.flags.specialization){if(state.autoMode){state.flags.specialization="医";state.daoHeart=Math.min(100,state.daoHeart+8);log("special","※ 自动推进中你默认走上医修之路。");}else chooseSpecialization();return}
+  if(state.age>=20&&!f.nightRite){f.nightRite=true;const ok=chance(55+state.daoHeart/4);if(ok){state.daoHeart=Math.min(100,state.daoHeart+4);state.exp+=90;log("mystic","※【星夜祭坛】你参与宗门夜祭,在星辉灌顶中稳住心神。道心与修为皆有提升。");}else{const lost=Math.floor(state.exp*0.05);state.exp-=lost;log("bad","※【星夜祭坛】你在灵压中失神片刻,折损少量修为。")}}if(state.realm>=1&&!f.sectTournament){f.sectTournament=true;const r1=chance(70),r2=chance(58+state.daoHeart/5),r3=chance(45+state.daoHeart/6);const wins=[r1,r2,r3].filter(Boolean).length;state.exp+=80+wins*70;state.spiritStones+=wins*120;if(state.autoMode){log("special",`※ 宗门大比首轮${r1?"告捷":"惜败"},次轮${r2?"力克劲敌":"止步"},决胜轮${r3?"一剑定胜":"憾负半招"}。`);}else{openModal({title:"宗门大比·序",sub:"群峰会武",body:"鼓声震山,内外门齐聚演武台。你的名帖被挂上了首轮擂台。",choices:[{label:"踏上擂台",hint:"迎战同门",action:()=>{closeModal();openModal({title:"宗门大比·首轮",body:r1?"你以三式连招先声夺人,首轮告捷。":"对手招式诡谲,你险中惜败,但赢得喝彩。",choices:[{label:"继续观战",action:()=>{closeModal();openModal({title:"宗门大比·次轮",body:r2?"次轮你临阵悟法,逆转取胜。":"次轮你体力不支,遗憾止步。",choices:[{label:"迎来终局",action:()=>{closeModal();openModal({title:"宗门大比·终局",body:r3?"决胜台上,你一剑定胜,满场沸腾。":"决胜台上你憾负半招,虽败犹荣。",choices:[{label:"收下奖赏",action:()=>{log("special",`※ 宗门大比落幕,你本届共胜 ${wins} 场,得修为与灵石奖赏。`);closeModal();render();}}]})}}]})}}]})}}]});return}}
+  if(state.realm>=2&&!f.tombRaid){f.tombRaid=true;const loss=chance(30);if(loss){state.hp=Math.max(1,state.hp-Math.floor(state.maxHp*0.2));log("bad","※ 你与道友共探古墓,机关骤发,虽脱险却负伤而归。") }else{addItem(state,"玉简",1);state.spiritStones+=500;log("mystic","※ 古墓团队探险大获成功,你得上古玉简与灵石。")}}
+  if(state.age>=35&&!f.mainLine1){f.mainLine1=true;log("special","※【主线·魔潮前夜】边境烽火频传,青云山召集亲传与内门弟子布防。")}
+  if(state.age>=40&&!f.demonInvasion){
+    f.demonInvasion=true;
+    const win=chance(50+state.realm*8);
+    if(win){state.daoHeart=Math.min(100,state.daoHeart+6);state.exp+=240;}
+    else{state.hp=Math.max(1,state.hp-Math.floor(state.maxHp*0.25));}
+    if(state.autoMode){
+      log(win?"special":"bad",win?"※【主线·魔修入侵】你随宗门迎战得胜,声名渐起。":"※【主线·魔修入侵】血战惨烈,你虽生还却身负重伤。");
+    }else{
+      openModal({title:"魔修入侵·前夜",sub:"烽火连营",body:"山门警钟彻夜不息。长老下令:所有弟子择一处避难/迎战据点。",choices:[
+        {label:"随主力守山门",hint:"稳健",action:()=>{closeModal();openModal({title:"魔修入侵·血战",body:win?"你与主力守住山门,斩退三波魔修。":"山门失守一角,你掩护同门撤离时重伤。",choices:[{label:"战后整顿",action:()=>{log(win?"special":"bad",win?"※ 魔潮暂退,你在宗门名声大涨。":"※ 你在撤离中护住同门,却留下重创。");closeModal();render();}}]})}},
+        {label:"护送凡人撤离",hint:"偏道心",action:()=>{if(win){state.daoHeart=Math.min(100,state.daoHeart+3)}else{state.hp=Math.max(1,state.hp-Math.floor(state.maxHp*0.08))}closeModal();openModal({title:"魔修入侵·人间线",body:win?"你护着落霞镇百姓夜渡山道,无一人掉队。":"你带队突围,虽被余波所伤,仍护住了大多数凡人。",choices:[{label:"返回宗门",action:()=>{log("special","※ 这一战后,你更明白为何要修仙护人。");closeModal();render();}}]})}}
+      ]});
+      return;
+    }
+  }
+  if(state.age>=45&&!f.mainLine2){
+    f.mainLine2=true;
+    if(state.autoMode){
+      f.path=chance(50)?"守山":"追剿";
+      log("special",`※ 自动推进中你选择了${f.path==="守山"?"镇守山门":"外出追剿"}。`);
+      return;
+    }
+    openModal({title:"主线抉择",sub:"魔潮余烬",body:"大战之后,宗门需要人手。你将如何选择?",choices:[{label:"镇守山门",hint:"更稳健",action:()=>{state.daoHeart=Math.min(100,state.daoHeart+5);f.path='守山';log('special','※ 你选择镇守山门,护佑一方平安。');closeModal();render()}},{label:"外出追剿",hint:"收益更高风险更高",action:()=>{f.path='追剿';const dmg=Math.floor(state.maxHp*0.12);state.hp=Math.max(1,state.hp-dmg);state.exp+=320;state.spiritStones+=260;log('special',`※ 你率队外出追剿余孽,虽受伤 ${dmg},却缴获颇丰。`);closeModal();render()}}]});
+    return;
+  }
+  if(state.realm>=3&&!f.secretRealm){f.secretRealm=true;log("mystic","※【纪元事件】天地异象突起,大型秘境开启。诸宗争渡,一个时代转折点已至。")}
+  if(state.realm>=3&&!f.mainLine3&&f.path){f.mainLine3=true;if(f.path==='守山'){state.daoHeart=Math.min(100,state.daoHeart+8);log('mystic','※【主线续章】你在守山岁月中悟得护道之心,道心大进。')}else{state.exp+=420;addItem(state,'妖丹',2);log('mystic','※【主线续章】你在追剿中夺回魔典残页,修为精进。')}}
+  if(state.realm>=4&&!f.epochFinale){f.epochFinale=true;log('special','※【纪元终章】秘境核心现世,诸宗缔结短暂盟约。你已站在时代洪流中心。');log('mystic','※ 你在核心石碑前看见上古战史残影,得知魔潮与秘境本为同源。');log('special','※ 主线暂告一段,但新的纪元篇章已在你脚下展开。')}
+}
+
+function processNpcGrudge(){for(const name in state.npcs){const npc=state.npcs[name],tmpl=NPC_TEMPLATES[name];if(!npc||npc.status!=="alive"||!tmpl||tmpl.isMortal)continue;if(npc.affinity<=5&&chance(12)){const dmg=Math.max(1,Math.floor(state.maxHp*0.08));state.hp=Math.max(1,state.hp-dmg);state.spiritStones=Math.max(0,state.spiritStones-80);log("bad",pickLine([`※ ${name} 因旧怨在夜路设伏,你损失灵石80并受伤 ${dmg}。`,`※ 你外出时遭人算计,线索直指 ${name},你受伤 ${dmg} 且丢失灵石80。`,`※ ${name} 借他人之手报复,你受伤 ${dmg},又损失灵石80。`]));break}}}
+
+function autoTryBreakthrough(){let guard=0;while(state.alive&&state.exp>=getExpNeeded(state)&&guard<3){guard++;const isRealmJump=state.stage>=REALMS[state.realm].stages.length-1;if(isRealmJump&&state.realm===REALMS.length-1)break;const req=isRealmJump?getRequiredItem(state):null;if(req&&!(state.inventory[req]>0))break;let rate=Math.min(95,55+state.daoHeart/2)-(isRealmJump?15:0)-(state.realm>=4?8:0);rate=Math.max(15,Math.floor(rate));if(isRealmJump&&req)removeItem(state,req,1);if(chance(rate)){if(isRealmJump){state.realm+=1;state.stage=0;state.maxLifespan+=getLifeAddWithTalent(state,REALMS[state.realm].lifeAdd);log("special",`※ 自动推进中你突破至 ${REALMS[state.realm].name}!`)}else{state.stage+=1;log("special",`※ 自动推进中你突破至 ${getRealmName(state)}。`)}state.exp=0;applyRealmStats(state);state.hp=Math.min(state.maxHp,state.hp);state.mp=Math.min(state.maxMp,state.mp);}else{state.exp=Math.floor(state.exp*0.7);log("bad","※ 自动突破失败,修为有所折损。");break}}}
+
+function runAutoPlan(years,plan){state.autoMode=true;
+  const actions=[];
+  for(let y=0;y<years;y++)for(const p of plan){for(let i=0;i<p.seasons;i++)actions.push(p.action)}
+  const maxSteps=Math.min(actions.length,400);
+  for(let i=0;i<maxSteps&&state.alive;i++){
+    if(actions[i]==='cultivate')actCultivate();
+    else if(actions[i]==='adventure')actAdventure();
+    else if(actions[i]==='social'){const alive=Object.keys(state.npcs).filter(n=>state.npcs[n].status==='alive');if(alive.length===0){actCultivate();}else{const target=alive[rand(0,alive.length-1)];if(NPC_TEMPLATES[target].location===state.location)npcChat(target);else{passSeasons(1);log('friend',`你向远方的 ${target} 飞鸽传书互诉近况。`);const old=state.npcs[target].affinity;state.npcs[target].affinity=Math.min(100,old+2);}}}
+    autoTryBreakthrough();
+  }
+  state.autoMode=false;
+  render();
+}
+
+function actAutoPlay(){
+  const html=`<div style="font-size:12px;color:#8b7d5c;line-height:1.8;">
+  自动推进年限:<input id="autoYears" type="number" min="1" max="30" value="3" style="width:64px;margin-left:6px;background:#111;color:#e8d8b0;border:1px solid #6b5d3c;padding:2px 6px;"> 年<br>
+  每年行动配比:<br>
+  修炼季数 <input id="autoCult" type="number" min="0" max="4" value="2" style="width:52px;background:#111;color:#e8d8b0;border:1px solid #6b5d3c;padding:2px 6px;"> +
+  历练季数 <input id="autoAdv" type="number" min="0" max="4" value="1" style="width:52px;background:#111;color:#e8d8b0;border:1px solid #6b5d3c;padding:2px 6px;"> +
+  社交季数 <input id="autoSoc" type="number" min="0" max="4" value="1" style="width:52px;background:#111;color:#e8d8b0;border:1px solid #6b5d3c;padding:2px 6px;">
+  <div style="margin-top:6px;color:#6b5d3c;">提示:三项总和建议=4(一年四季)。若不等于4将自动归一到4季。</div></div>`;
+  openModal({title:"自动推进",sub:"自定义年限与行动",body:"",html,choices:[{label:"开始自动推进",hint:"按设定循环",action:()=>{const years=Math.max(1,Math.min(30,parseInt(document.getElementById('autoYears').value||'3',10)));let c=Math.max(0,parseInt(document.getElementById('autoCult').value||'0',10));let a=Math.max(0,parseInt(document.getElementById('autoAdv').value||'0',10));let so=Math.max(0,parseInt(document.getElementById('autoSoc').value||'0',10));let total=c+a+so;if(total<=0){toast('至少选择1季行动');return}const scale=4/total;c=Math.max(0,Math.round(c*scale));a=Math.max(0,Math.round(a*scale));so=Math.max(0,4-c-a);const plan=[];if(c>0)plan.push({action:'cultivate',seasons:c});if(a>0)plan.push({action:'adventure',seasons:a});if(so>0)plan.push({action:'social',seasons:so});closeModal();runAutoPlan(years,plan);}},{label:"取消",hint:"",action:()=>{closeModal();render()}}]})
+}
 
 // ============== UI - non-blocking save + scroll preserve ==============
 function afterAction(){
   saveStateAsync(); // fire and forget, no await
   if(!state.alive)setTimeout(()=>render(),200);
   else render();
+  triggerStoryEvents();
+  processNpcGrudge();
 }
 
 function render(){
@@ -494,16 +580,15 @@ function render(){
   if(!state.alive){app.innerHTML=renderEnding();bindEnding();window.scrollTo(0,scrollY);return}
   app.innerHTML=renderGame();
   bindGame();
-  // Restore scroll twice (sync + async) to handle browser quirks
-  window.scrollTo(0,scrollY);
-  requestAnimationFrame(()=>window.scrollTo(0,scrollY));
+  // 仅在弹窗存在时保留页面滚动,避免日志面板反复上滑下滑
+  if(modalStack.length>0)window.scrollTo(0,scrollY);
   const logEl=document.getElementById("logPanel");
   if(logEl)logEl.scrollTop=logEl.scrollHeight;
 }
 
 function renderStart(){return `<div class="start-screen"><h1>寻道</h1><div class="subtitle">凡 人 修 仙</div><div class="opening">天地有灵,万物可修。<br>你是落霞镇外一户人家的女儿,<br>命中带有修行之缘——<br>且看你能否在这浩瀚仙途之上,<br>一步步行至那飞升之境。</div><input id="nameInput" placeholder="请输入你的名字" maxlength="6"/><button class="start-btn" id="startBtn">开 始 修 行</button></div>`}
 
-function bindStart(){document.getElementById("startBtn").onclick=()=>{const name=document.getElementById("nameInput").value.trim()||"无名";newGame(name);saveStateAsync();render()}}
+function bindStart(){document.getElementById("startBtn").onclick=()=>{const name=document.getElementById("nameInput").value.trim()||"无名";newGame(name);saveStateAsync();render();setTimeout(()=>openRootCeremony(),80)}}
 
 function renderEnding(){const reason=state.ascended?"飞升上界":(state.age>=state.maxLifespan?"寿元已尽":"陨落");return `<div class="title">${state.ascended?'飞 升':'终 章'}<span class="sub">${state.ascended?'ASCENSION':'EPILOGUE'}</span></div><div class="panel"><div class="realm-display">${state.name} · ${getRealmName(state)}</div><div class="realm-sub">${reason}</div><div style="margin-top:14px;font-size:13px;line-height:1.9;color:#c9a96e;">享年 ${state.age} 岁。<br>灵根:<span class="spirit-root-${state.spiritRoot}">${state.spiritRoot}</span>(${state.elements.join("、")})<br>${state.partner?`道侣:${state.partner}<br>`:''}最终修为:${state.exp} 点</div></div><div class="panel log-panel" id="logPanel">${state.log.slice(-15).map(e=>`<div class="log-entry log-${e.type||''}"><span class="log-time">${e.age}岁</span>${e.text}</div>`).join('')}</div><div class="actions three"><button class="action-btn primary" id="restartBtn"><span class="lbl">重启修行</span></button><button class="action-btn" id="reviewBtn"><span class="lbl">一生回顾</span></button><button class="action-btn" id="npcsBtn"><span class="lbl">故人录</span></button></div>`}
 
@@ -542,14 +627,15 @@ function renderGame(){
   <button class="action-btn" id="adventureBtn"><span class="lbl">历 练</span><span class="tm">1 季</span></button>
   <button class="action-btn" id="secludeBtn"><span class="lbl">闭 关</span><span class="tm">3~300 年</span></button>
   <button class="action-btn" id="travelBtn"><span class="lbl">出 行</span><span class="tm">1 季</span></button>
-  <button class="action-btn" id="socialBtn"><span class="lbl">故 人</span><span class="tm">1 季</span></button>
+  <button class="action-btn" id="socialBtn"><span class="lbl">故 人</span><span class="tm">3次=1季</span></button>
   <button class="action-btn" id="invBtn"><span class="lbl">背 包</span><span class="tm">即时</span></button>
+  <button class="action-btn" id="autoBtn"><span class="lbl">自 动</span><span class="tm">批量</span></button>
   <button class="action-btn ${canBreakthrough?'primary':''}" id="bkBtn" ${canBreakthrough?'':'disabled'}><span class="lbl">突 破</span><span class="tm">2 季</span></button>
   <button class="action-btn" id="resetBtn"><span class="lbl">重 启</span><span class="tm">即时</span></button>
 </div>`;
 }
 
-function bindGame(){document.getElementById("cultivateBtn").onclick=actCultivate;document.getElementById("adventureBtn").onclick=actAdventure;document.getElementById("secludeBtn").onclick=actSeclude;document.getElementById("travelBtn").onclick=actTravel;document.getElementById("socialBtn").onclick=actSocial;document.getElementById("invBtn").onclick=openInventory;document.getElementById("bkBtn").onclick=actBreakthrough;document.getElementById("statusBtn").onclick=actStatus;document.getElementById("resetBtn").onclick=()=>{openModal({title:"重启",body:"确认重启吗?当前进度将永久消失。",choices:[{label:"确认重启",hint:"不可逆",action:async()=>{closeModal();await resetState()}},{label:"取消",hint:"",action:()=>{closeModal();render()}}]})}}
+function bindGame(){document.getElementById("cultivateBtn").onclick=actCultivate;document.getElementById("adventureBtn").onclick=actAdventure;document.getElementById("secludeBtn").onclick=actSeclude;document.getElementById("travelBtn").onclick=actTravel;document.getElementById("socialBtn").onclick=actSocial;document.getElementById("invBtn").onclick=openInventory;document.getElementById("autoBtn").onclick=actAutoPlay;document.getElementById("bkBtn").onclick=actBreakthrough;document.getElementById("statusBtn").onclick=actStatus;document.getElementById("resetBtn").onclick=()=>{openModal({title:"重启",body:"确认重启吗?当前进度将永久消失。",choices:[{label:"确认重启",hint:"不可逆",action:async()=>{closeModal();await resetState()}},{label:"取消",hint:"",action:()=>{closeModal();render()}}]})}}
 
 function actStatus(){
   let text=`姓名:${state.name}(女)\n灵根:${state.spiritRoot}(×${state.rootMult.toFixed(2)})\n属性:${state.elements.join("、")}\n\n`;
@@ -577,7 +663,7 @@ function renderModal(){const existing=document.getElementById("modalBg");if(exis
 
 function openInventory(){let html='<div class="inv-grid">';if(state.weapon){const e=EQUIP[state.weapon];html+=`<div class="inv-item"><div><span class="nm">${state.weapon}</span><span class="ds">兵器 · ${e.desc}(攻击+${e.atk})</span></div><span class="ct">已佩戴</span></div>`}if(state.armor){const e=EQUIP[state.armor];html+=`<div class="inv-item"><div><span class="nm">${state.armor}</span><span class="ds">护具 · ${e.desc}(防御+${e.def})</span></div><span class="ct">已穿戴</span></div>`}const entries=Object.entries(state.inventory);if(entries.length===0&&!state.weapon&&!state.armor)html+='<div class="inv-empty">袋中空空如也。</div>';else entries.forEach(([name,count])=>{const it=ITEMS[name];const usable=it&&it.use&&state.alive;html+=`<div class="inv-item"><div><span class="nm">${name}</span><span class="ds">${it?it.desc:''}</span></div><span class="ct">×${count}</span>${usable?`<button data-use="${name}">服用</button>`:''}</div>`});html+='</div>';openModal({title:"背 包",sub:`灵石 ${state.spiritStones}`,body:"",html,choices:[{label:"返回",hint:"",action:()=>{closeModal();render()}}]});setTimeout(()=>{document.querySelectorAll("[data-use]").forEach(btn=>{btn.onclick=()=>{const name=btn.getAttribute("data-use");const it=ITEMS[name];if(!it||!it.use)return;if(!removeItem(state,name,1))return;const msg=it.use(state);log("good",`服用 ${name}:${msg}`);closeModal();afterAction()}})},0)}
 
-function renderCombat(){const e=combatState.enemy;const ehpPct=Math.max(0,(e.hp/e.maxHp)*100);const phpPct=Math.max(0,(state.hp/state.maxHp)*100);const pmpPct=Math.max(0,(state.mp/state.maxMp)*100);const html=`<div class="combat-grid"><div class="combat-side"><h4>${state.name}</h4><div class="bar-bg" style="margin:4px 0;"><div class="bar-fill bar-hp" style="width:${phpPct}%"></div></div><div class="hp">气血 ${state.hp}/${state.maxHp}</div><div class="bar-bg" style="margin:4px 0;"><div class="bar-fill bar-mp" style="width:${pmpPct}%"></div></div><div class="hp" style="color:#6bd0ff;">法力 ${state.mp}/${state.maxMp}</div></div><div class="combat-side"><h4>${e.name}</h4><div class="bar-bg" style="margin:4px 0;"><div class="bar-fill bar-hp" style="width:${ehpPct}%"></div></div><div class="hp">气血 ${e.hp}/${e.maxHp}</div><div class="hp" style="color:#8b7d5c;font-size:11px;margin-top:4px;">攻 ${e.atk} · 防 ${e.def}</div></div></div><div style="max-height:140px;overflow-y:auto;font-size:13px;line-height:1.7;background:rgba(0,0,0,0.25);padding:8px;border-radius:3px;border:1px solid rgba(201,169,110,0.12);">${combatState.log.slice(-6).map(l=>`<div class="log-${l.t}">${l.x}</div>`).join('')||'<div style="color:#6b5d3c;">战斗开始……</div>'}</div>`;modalStack=[];modalStack.push({title:"对 敌",sub:getRealmName(state),body:"",html,choices:[{label:"攻 击",hint:`造成约 ${getCurrentAtk(state)-e.def} 伤害${getCritChance(state)>0?`(${getCritChance(state)}%暴击)`:''}`,action:()=>combatPlayerTurn("attack")},{label:`法 术(耗法力 ${Math.floor(state.maxMp*0.3)})`,hint:`造成约 ${Math.floor(getCurrentAtk(state)*getSkillMult(state))-e.def} 伤害`,action:()=>combatPlayerTurn("skill")},{label:"服用回春丹",hint:state.inventory["回春丹"]?`剩余 ${state.inventory["回春丹"]} 颗`:"无",action:()=>combatPlayerTurn("item","回春丹")},{label:"遁 走",hint:getFleeBonus(state)>0?`风属性 +${getFleeBonus(state)}%`:"尝试脱离战斗",action:()=>combatPlayerTurn("flee")}]});renderModal()}
+function renderCombat(){const e=combatState.enemy;const ehpPct=Math.max(0,(e.hp/e.maxHp)*100);const phpPct=Math.max(0,(state.hp/state.maxHp)*100);const pmpPct=Math.max(0,(state.mp/state.maxMp)*100);const html=`<div class="combat-grid"><div class="combat-side"><h4>${state.name}</h4><div class="bar-bg" style="margin:4px 0;"><div class="bar-fill bar-hp" style="width:${phpPct}%"></div></div><div class="hp">气血 ${state.hp}/${state.maxHp}</div><div class="bar-bg" style="margin:4px 0;"><div class="bar-fill bar-mp" style="width:${pmpPct}%"></div></div><div class="hp" style="color:#6bd0ff;">法力 ${state.mp}/${state.maxMp}</div></div><div class="combat-side"><h4>${e.name}</h4><div class="bar-bg" style="margin:4px 0;"><div class="bar-fill bar-hp" style="width:${ehpPct}%"></div></div><div class="hp">气血 ${e.hp}/${e.maxHp}</div><div class="hp" style="color:#8b7d5c;font-size:11px;margin-top:4px;">攻 ${e.atk} · 防 ${e.def}</div></div></div><div style="max-height:140px;overflow-y:auto;font-size:13px;line-height:1.7;background:rgba(0,0,0,0.25);padding:8px;border-radius:3px;border:1px solid rgba(201,169,110,0.12);">${combatState.log.slice(-6).map(l=>`<div class="log-${l.t}">${l.x}</div>`).join('')||'<div style="color:#6b5d3c;">战斗开始……</div>'}</div>`;modalStack=[];modalStack.push({title:"对 敌",sub:getRealmName(state),body:"",html,choices:[{label:"攻 击",hint:`造成约 ${getCurrentAtk(state)-e.def} 伤害${getCritChance(state)>0?`(${getCritChance(state)}%暴击)`:''}`,action:()=>combatPlayerTurn("attack")},{label:`法 术(耗法力 ${Math.floor(state.maxMp*0.3)})`,hint:`造成约 ${Math.floor(getCurrentAtk(state)*getSkillMult(state))-e.def} 伤害`,action:()=>combatPlayerTurn("skill")},{label:"自动战斗",hint:"连打8回合(法术优先)",action:()=>combatAuto(8)},{label:"服用回春丹",hint:state.inventory["回春丹"]?`剩余 ${state.inventory["回春丹"]} 颗`:"无",action:()=>combatPlayerTurn("item","回春丹")},{label:"遁 走",hint:getFleeBonus(state)>0?`风属性 +${getFleeBonus(state)}%`:"尝试脱离战斗",action:()=>combatPlayerTurn("flee")}]});renderModal()}
 
 function toast(msg){const t=document.createElement("div");t.className="toast";t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2400)}
 
