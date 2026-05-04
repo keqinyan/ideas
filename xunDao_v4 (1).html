@@ -368,10 +368,10 @@ function doSeclude(years){
       if(isRealmJump&&state.realm===REALMS.length-1)break;
       const requiredItem=isRealmJump?getRequiredItem(state):null;
       if(requiredItem&&!(state.inventory[requiredItem]>0))break;
-      let rate=Math.min(95,55+state.daoHeart/2);
+      let rate=Math.min(92,50+state.daoHeart/2);
       if(isRealmJump)rate-=15;
       if(state.realm>=4)rate-=8;
-      rate=Math.max(15,Math.floor(rate));
+      rate=Math.max(18,Math.floor(rate));
       
       if(chance(rate)){
         if(isRealmJump){state.realm+=1;state.stage=0;state.maxLifespan+=getLifeAddWithTalent(state,REALMS[state.realm].lifeAdd);realmJumps.push(REALMS[state.realm].name)}
@@ -420,10 +420,10 @@ function actBreakthrough(){
   const isRealmJump=state.stage>=REALMS[state.realm].stages.length-1;
   const nextRealmName=isRealmJump&&state.realm<REALMS.length-1?REALMS[state.realm+1].name:null;
   const requiredItem=isRealmJump?getRequiredItem(state):null;
-  let rate=Math.min(95,55+state.daoHeart/2);
+  let rate=Math.min(92,50+state.daoHeart/2);
   if(isRealmJump)rate-=15;
   if(state.realm>=4)rate-=8;
-  rate=Math.max(15,Math.floor(rate));
+  rate=Math.max(18,Math.floor(rate));
   const stoneCost=(state.realm+1)*50;
   const hasItem=requiredItem?(state.inventory[requiredItem]||0)>0:true;
   let bodyText="";
@@ -555,7 +555,7 @@ function triggerStoryEvents(){if(!state.alive)return;const f=state.flags.epochEv
 
 function processNpcGrudge(){for(const name in state.npcs){const npc=state.npcs[name],tmpl=NPC_TEMPLATES[name];if(!npc||npc.status!=="alive"||!tmpl||tmpl.isMortal)continue;if(npc.affinity<=5&&chance(12)){const dmg=Math.max(1,Math.floor(state.maxHp*0.08));state.hp=Math.max(1,state.hp-dmg);state.spiritStones=Math.max(0,state.spiritStones-80);log("bad",pickLine([`※ ${name} 因旧怨在夜路设伏,你损失灵石80并受伤 ${dmg}。`,`※ 你外出时遭人算计,线索直指 ${name},你受伤 ${dmg} 且丢失灵石80。`,`※ ${name} 借他人之手报复,你受伤 ${dmg},又损失灵石80。`]));break}}}
 
-function autoTryBreakthrough(){let guard=0;while(state.alive&&state.exp>=getExpNeeded(state)&&guard<3){guard++;const isRealmJump=state.stage>=REALMS[state.realm].stages.length-1;if(isRealmJump&&state.realm===REALMS.length-1)break;const req=isRealmJump?getRequiredItem(state):null;if(req&&!(state.inventory[req]>0))break;let rate=Math.min(95,55+state.daoHeart/2)-(isRealmJump?15:0)-(state.realm>=4?8:0);rate=Math.max(15,Math.floor(rate));if(chance(rate)){if(isRealmJump&&req)removeItem(state,req,1);if(isRealmJump){state.realm+=1;state.stage=0;state.maxLifespan+=getLifeAddWithTalent(state,REALMS[state.realm].lifeAdd);log("special",`※ 自动推进中你突破至 ${REALMS[state.realm].name}!`)}else{state.stage+=1;log("special",`※ 自动推进中你突破至 ${getRealmName(state)}。`)}state.exp=0;applyRealmStats(state);state.hp=Math.min(state.maxHp,state.hp);state.mp=Math.min(state.maxMp,state.mp);}else{state.exp=Math.floor(state.exp*0.7);log("bad","※ 自动突破失败,修为有所折损。");break}}}
+function autoTryBreakthrough(){let guard=0;while(state.alive&&state.exp>=getExpNeeded(state)&&guard<3){guard++;const isRealmJump=state.stage>=REALMS[state.realm].stages.length-1;if(isRealmJump&&state.realm===REALMS.length-1)break;const req=isRealmJump?getRequiredItem(state):null;if(req&&!(state.inventory[req]>0))break;let rate=Math.min(92,50+state.daoHeart/2)-(isRealmJump?15:0)-(state.realm>=4?8:0);rate=Math.max(18,Math.floor(rate));if(chance(rate)){if(isRealmJump&&req)removeItem(state,req,1);if(isRealmJump){state.realm+=1;state.stage=0;state.maxLifespan+=getLifeAddWithTalent(state,REALMS[state.realm].lifeAdd);log("special",`※ 自动推进中你突破至 ${REALMS[state.realm].name}!`)}else{state.stage+=1;log("special",`※ 自动推进中你突破至 ${getRealmName(state)}。`)}state.exp=0;applyRealmStats(state);state.hp=Math.min(state.maxHp,state.hp);state.mp=Math.min(state.maxMp,state.mp);}else{state.exp=Math.floor(state.exp*0.7);log("bad","※ 自动突破失败,修为有所折损。");break}}}
 
 function runAutoPlan(years,plan){state.autoMode=true;
   const actions=[];
