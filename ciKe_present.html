@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0f1720">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>此刻 · 活在当下</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500&family=Ma+Shan+Zheng&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg0:#0b1016;--bg1:#131c26;
+  --ink:#e7eef2;--ink-dim:#8ea3b0;--ink-faint:#5a6d78;
+  --accent:#7fd1c4;--accent2:#c9b98e;--warm:#e6b89c;
+  --panel:rgba(255,255,255,.045);--panel-brd:rgba(255,255,255,.09);
+  --glow:rgba(127,209,196,.35);
+}
+html,body{height:100%}
+body{
+  font-family:'Noto Serif SC',serif;color:var(--ink);
+  background:
+    radial-gradient(120% 80% at 20% -10%, #1c2b34 0%, transparent 55%),
+    radial-gradient(120% 90% at 90% 110%, #241f2e 0%, transparent 55%),
+    linear-gradient(160deg,var(--bg1),var(--bg0));
+  background-attachment:fixed;min-height:100vh;overflow-x:hidden;
+  transition:background 1.6s ease;
+}
+body.breathe-mode{
+  background:
+    radial-gradient(120% 80% at 50% 0%, #16303a 0%, transparent 60%),
+    linear-gradient(160deg,#0d1a20,#080d12);
+}
+.app{max-width:460px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;padding:0 16px 96px}
+
+/* header */
+.top{text-align:center;padding:26px 0 10px}
+.top h1{font-family:'Ma Shan Zheng',cursive;font-size:30px;letter-spacing:12px;color:var(--accent2);text-shadow:0 0 30px rgba(201,185,142,.25)}
+.top .clock{font-size:12px;color:var(--ink-faint);letter-spacing:3px;margin-top:6px;font-variant-numeric:tabular-nums}
+.top .greet{font-size:13px;color:var(--ink-dim);letter-spacing:2px;margin-top:2px}
+
+/* views */
+.view{display:none;animation:fade .5s ease}
+.view.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* home cards */
+.hero{
+  margin:8px 0 18px;padding:22px 20px;border-radius:20px;text-align:center;
+  background:linear-gradient(140deg,rgba(127,209,196,.10),rgba(230,184,156,.06));
+  border:1px solid var(--panel-brd);position:relative;overflow:hidden;
+}
+.hero .q{font-size:16px;line-height:1.9;color:var(--ink);letter-spacing:1px;min-height:60px;display:flex;align-items:center;justify-content:center}
+.hero .qa{font-size:11px;color:var(--ink-faint);letter-spacing:3px;margin-top:8px}
+.hero .refresh{position:absolute;top:12px;right:14px;font-size:11px;color:var(--ink-faint);cursor:pointer;letter-spacing:1px}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{
+  background:var(--panel);border:1px solid var(--panel-brd);border-radius:18px;
+  padding:18px 16px;cursor:pointer;transition:transform .2s,border-color .3s,background .3s;
+  position:relative;overflow:hidden;min-height:112px;display:flex;flex-direction:column;justify-content:space-between;
+}
+.card:active{transform:scale(.97)}
+.card .ic{font-size:26px;filter:drop-shadow(0 0 12px var(--glow))}
+.card .t{font-family:'Ma Shan Zheng',cursive;font-size:20px;letter-spacing:3px;color:var(--ink);margin-top:auto}
+.card .d{font-size:11px;color:var(--ink-dim);letter-spacing:1px;margin-top:3px;line-height:1.6}
+.card.wide{grid-column:1/3;min-height:auto;flex-direction:row;align-items:center;gap:14px}
+.card.wide .t{margin:0}
+
+/* section title */
+.sec-back{display:inline-flex;align-items:center;gap:6px;color:var(--ink-dim);font-size:13px;letter-spacing:2px;cursor:pointer;padding:16px 0 6px}
+.sec-back:active{color:var(--ink)}
+.sec-h{font-family:'Ma Shan Zheng',cursive;font-size:24px;letter-spacing:6px;color:var(--accent2);text-align:center;margin:2px 0 4px}
+.sec-sub{text-align:center;font-size:12px;color:var(--ink-faint);letter-spacing:2px;margin-bottom:18px}
+
+/* ===== breathing ===== */
+.breath-stage{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:56vh;position:relative}
+.orb-wrap{position:relative;width:240px;height:240px;display:flex;align-items:center;justify-content:center}
+.orb{
+  width:120px;height:120px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#bff0e6,#7fd1c4 45%,#3f8f85 100%);
+  box-shadow:0 0 60px 6px var(--glow);
+  will-change:transform;transform:scale(.62);
+}
+.orb.run{animation:breathe var(--cyc,12s) ease-in-out infinite}
+.ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(127,209,196,.18)}
+.ring.r2{inset:28px}
+.orb-txt{position:absolute;font-size:17px;letter-spacing:4px;color:#eafffb;text-shadow:0 0 14px rgba(127,209,196,.6);pointer-events:none}
+@keyframes breathe{
+  0%{transform:scale(.62)}
+  100%{transform:scale(.62)}
+}
+.breath-count{font-size:13px;color:var(--ink-dim);letter-spacing:3px;margin-top:20px;font-variant-numeric:tabular-nums}
+.pattern-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:14px 0 4px}
+.chip{
+  padding:7px 14px;border-radius:20px;font-size:12px;letter-spacing:1px;cursor:pointer;
+  border:1px solid var(--panel-brd);color:var(--ink-dim);background:var(--panel);transition:.25s;
+}
+.chip.on{color:var(--bg0);background:var(--accent);border-color:var(--accent);font-weight:500}
+.pattern-desc{text-align:center;font-size:11px;color:var(--ink-faint);letter-spacing:1px;margin:6px 0 2px;line-height:1.7}
+
+/* ===== grounding 54321 ===== */
+.ground-step{background:var(--panel);border:1px solid var(--panel-brd);border-radius:18px;padding:24px 20px;text-align:center;min-height:220px;display:flex;flex-direction:column;justify-content:center}
+.ground-n{font-family:'Ma Shan Zheng',cursive;font-size:52px;color:var(--accent);line-height:1;text-shadow:0 0 30px var(--glow)}
+.ground-sense{font-size:22px;letter-spacing:6px;margin-top:10px;color:var(--ink)}
+.ground-q{font-size:14px;color:var(--ink-dim);letter-spacing:1px;margin-top:14px;line-height:1.9}
+.ground-input{width:100%;margin-top:16px;background:rgba(0,0,0,.25);border:1px solid var(--panel-brd);border-radius:12px;color:var(--ink);font-family:inherit;font-size:14px;padding:10px 12px;letter-spacing:1px}
+.ground-input:focus{outline:none;border-color:var(--accent)}
+.dots{display:flex;gap:8px;justify-content:center;margin:18px 0}
+.dots i{width:8px;height:8px;border-radius:50%;background:var(--ink-faint);opacity:.4;transition:.3s}
+.dots i.on{opacity:1;background:var(--accent);transform:scale(1.3)}
+
+/* ===== meditation timer ===== */
+.timer-ring{position:relative;width:220px;height:220px;margin:8px auto 4px}
+.timer-ring svg{transform:rotate(-90deg)}
+.timer-ring .disp{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.timer-ring .tt{font-size:44px;font-variant-numeric:tabular-nums;letter-spacing:2px;color:var(--ink)}
+.timer-ring .ts{font-size:12px;color:var(--ink-faint);letter-spacing:3px;margin-top:2px}
+.dur-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:16px 0}
+
+/* ===== journal ===== */
+.jrnl-box{background:var(--panel);border:1px solid var(--panel-brd);border-radius:18px;padding:16px}
+.jrnl-box textarea{width:100%;min-height:90px;background:transparent;border:none;color:var(--ink);font-family:inherit;font-size:15px;line-height:1.9;letter-spacing:.5px;resize:none}
+.jrnl-box textarea:focus{outline:none}
+.jrnl-prompt{font-size:12px;color:var(--ink-faint);letter-spacing:1px;margin-bottom:8px}
+.jrnl-list{margin-top:20px;display:flex;flex-direction:column;gap:10px}
+.jrnl-item{background:var(--panel);border:1px solid var(--panel-brd);border-radius:14px;padding:12px 14px}
+.jrnl-item .m{font-size:14px;line-height:1.8;color:var(--ink);letter-spacing:.5px;white-space:pre-wrap}
+.jrnl-item .tm{font-size:10px;color:var(--ink-faint);letter-spacing:1px;margin-top:6px;display:flex;justify-content:space-between}
+.jrnl-item .del{cursor:pointer;color:var(--ink-faint)}
+
+/* ===== bell reminder ===== */
+.bell-panel{background:var(--panel);border:1px solid var(--panel-brd);border-radius:18px;padding:20px;text-align:center}
+.bell-status{font-size:15px;letter-spacing:2px;color:var(--ink);margin:8px 0}
+.bell-next{font-size:12px;color:var(--ink-faint);letter-spacing:1px;margin-bottom:16px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 26px;border-radius:26px;font-family:inherit;font-size:15px;letter-spacing:3px;
+  border:1px solid var(--accent);color:var(--accent);background:transparent;cursor:pointer;transition:.25s}
+.btn:active{transform:scale(.96)}
+.btn.solid{background:var(--accent);color:#08211d;border-color:var(--accent);font-weight:500}
+.btn.ghost{border-color:var(--panel-brd);color:var(--ink-dim)}
+.btn-row{display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap}
+
+.toast{position:fixed;left:50%;bottom:104px;transform:translateX(-50%) translateY(20px);opacity:0;
+  background:rgba(20,30,38,.95);border:1px solid var(--panel-brd);color:var(--ink);
+  padding:11px 20px;border-radius:22px;font-size:13px;letter-spacing:1px;transition:.35s;pointer-events:none;z-index:50;backdrop-filter:blur(8px)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* bottom nav */
+.nav{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;gap:4px;padding:8px 10px 14px;
+  background:linear-gradient(to top,rgba(8,13,18,.96),rgba(8,13,18,.6) 70%,transparent);backdrop-filter:blur(6px);z-index:40}
+.nav .app-inner{max-width:460px;width:100%;display:flex;justify-content:space-around}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:var(--ink-faint);padding:4px 12px;transition:.2s}
+.nav-btn.on{color:var(--accent)}
+.nav-btn .ni{font-size:19px}
+.nav-btn .nl{font-size:10px;letter-spacing:1px}
+
+.stat-strip{display:flex;justify-content:center;gap:20px;margin:14px 0 4px;font-size:11px;color:var(--ink-faint);letter-spacing:1px}
+.stat-strip b{color:var(--accent2);font-size:15px;font-weight:500}
+.empty{text-align:center;color:var(--ink-faint);font-size:12px;letter-spacing:1px;padding:24px 0}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <h1>此刻</h1>
+    <div class="clock" id="clock">--:--</div>
+    <div class="greet" id="greet"></div>
+  </div>
+
+  <!-- HOME -->
+  <div class="view on" id="v-home">
+    <div class="hero">
+      <span class="refresh" id="qRefresh">↻ 换一句</span>
+      <div class="q" id="quote">此刻，就是你唯一拥有的时间。</div>
+      <div class="qa" id="quoteA"></div>
+    </div>
+    <div class="stat-strip">
+      <span>已练习 <b id="stTotal">0</b> 次</span>
+      <span>连续 <b id="stStreak">0</b> 天</span>
+    </div>
+    <div class="grid">
+      <div class="card" data-go="breath">
+        <div class="ic">🫧</div>
+        <div><div class="t">呼吸</div><div class="d">跟随光球，慢下来</div></div>
+      </div>
+      <div class="card" data-go="ground">
+        <div class="ic">🌿</div>
+        <div><div class="t">着陆</div><div class="d">五感回到此刻</div></div>
+      </div>
+      <div class="card" data-go="meditate">
+        <div class="ic">🧘</div>
+        <div><div class="t">静坐</div><div class="d">安静地坐一会儿</div></div>
+      </div>
+      <div class="card" data-go="journal">
+        <div class="ic">🪷</div>
+        <div><div class="t">此刻</div><div class="d">记下你注意到的</div></div>
+      </div>
+      <div class="card wide" data-go="bell">
+        <div class="ic">🔔</div>
+        <div><div class="t">正念铃</div><div class="d">让轻响，随时把你唤回当下</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BREATH -->
+  <div class="view" id="v-breath">
+    <div class="sec-back" data-back>‹ 返回</div>
+    <div class="sec-h">呼吸</div>
+    <div class="pattern-row" id="patternRow"></div>
+    <div class="pattern-desc" id="patternDesc"></div>
+    <div class="breath-stage">
+      <div class="orb-wrap">
+        <div class="ring"></div><div class="ring r2"></div>
+        <div class="orb" id="orb"></div>
+        <div class="orb-txt" id="orbTxt">准备好了吗</div>
+      </div>
+      <div class="breath-count" id="breathCount">— 呼吸 0 次 —</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn solid" id="breathStart">开始</button>
+    </div>
+  </div>
+
+  <!-- GROUND -->
+  <div class="view" id="v-ground">
+    <div class="sec-back" data-back>‹ 返回</div>
+    <div class="sec-h">着陆</div>
+    <div class="sec-sub">5·4·3·2·1 · 回到你的身体与此刻</div>
+    <div class="dots" id="groundDots"></div>
+    <div class="ground-step" id="groundStep">
+      <div class="ground-n" id="gN">5</div>
+      <div class="ground-sense" id="gSense">看见</div>
+      <div class="ground-q" id="gQ">找出你此刻能<b>看见</b>的 5 样东西</div>
+      <input class="ground-input" id="gInput" placeholder="慢慢说出，或写下来…" autocomplete="off">
+    </div>
+    <div class="btn-row">
+      <button class="btn ghost" id="gPrev">上一步</button>
+      <button class="btn solid" id="gNext">下一步 ›</button>
+    </div>
+  </div>
+
+  <!-- MEDITATE -->
+  <div class="view" id="v-meditate">
+    <div class="sec-back" data-back>‹ 返回</div>
+    <div class="sec-h">静坐</div>
+    <div class="sec-sub">起止皆有钵音 · 只需安坐</div>
+    <div class="timer-ring">
+      <svg width="220" height="220">
+        <circle cx="110" cy="110" r="100" stroke="rgba(255,255,255,.07)" stroke-width="4" fill="none"/>
+        <circle id="timerArc" cx="110" cy="110" r="100" stroke="var(--accent)" stroke-width="4" fill="none"
+          stroke-linecap="round" stroke-dasharray="628" stroke-dashoffset="628" style="filter:drop-shadow(0 0 6px var(--glow));transition:stroke-dashoffset 1s linear"/>
+      </svg>
+      <div class="disp"><div class="tt" id="timerTxt">05:00</div><div class="ts" id="timerState">选择时长</div></div>
+    </div>
+    <div class="dur-row" id="durRow"></div>
+    <div class="btn-row">
+      <button class="btn solid" id="medStart">开始</button>
+    </div>
+  </div>
+
+  <!-- JOURNAL -->
+  <div class="view" id="v-journal">
+    <div class="sec-back" data-back>‹ 返回</div>
+    <div class="sec-h">此刻</div>
+    <div class="sec-sub" id="jrnlSub">你此刻，注意到了什么？</div>
+    <div class="jrnl-box">
+      <div class="jrnl-prompt" id="jrnlPrompt"></div>
+      <textarea id="jrnlText" placeholder="一个声音、一缕光、一次呼吸、一种感受…"></textarea>
+    </div>
+    <div class="btn-row">
+      <button class="btn solid" id="jrnlSave">留下此刻</button>
+    </div>
+    <div class="jrnl-list" id="jrnlList"></div>
+  </div>
+
+  <!-- BELL -->
+  <div class="view" id="v-bell">
+    <div class="sec-back" data-back>‹ 返回</div>
+    <div class="sec-h">正念铃</div>
+    <div class="sec-sub">在忙碌里，让一声轻响把你唤回当下</div>
+    <div class="bell-panel">
+      <div class="pattern-row" id="bellRow"></div>
+      <div class="bell-status" id="bellStatus">铃声未开启</div>
+      <div class="bell-next" id="bellNext">开启后，将每隔一段时间轻响一次</div>
+      <div class="btn-row" style="margin-top:6px">
+        <button class="btn solid" id="bellToggle">开启</button>
+        <button class="btn ghost" id="bellTest">试听</button>
+      </div>
+      <div class="pattern-desc" style="margin-top:14px">保持此页开启即可 · 每次响起时，停下，深呼吸一次，问自己：<br>「我此刻在哪里？」</div>
+    </div>
+  </div>
+</div>
+
+<!-- bottom nav -->
+<div class="nav"><div class="app-inner" id="nav"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ storage ============ */
+const DB={
+  get(k,d){try{return JSON.parse(localStorage.getItem('ck_'+k))??d}catch(e){return d}},
+  set(k,v){localStorage.setItem('ck_'+k,JSON.stringify(v))}
+};
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),1900)}
+
+/* ============ audio (bowl / bell) ============ */
+let AC;
+function ac(){if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();return AC}
+function bowl(freq=340,dur=3.4,vol=.5){
+  const c=ac(),t=c.currentTime;
+  [1,2.02,2.97,4.1].forEach((h,i)=>{
+    const o=c.createOscillator(),g=c.createGain();
+    o.type='sine';o.frequency.value=freq*h;
+    const v=vol/(i+1.4);
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.02);
+    g.gain.exponentialRampToValueAtTime(.0001,t+dur*(1-i*.12));
+    o.connect(g).connect(c.destination);o.start(t);o.stop(t+dur)
+  });
+}
+function tick(){bowl(520,1.4,.25)}
+
+/* ============ nav / views ============ */
+const NAVS=[
+  ['home','家','⌂'],['breath','呼吸','🫧'],['meditate','静坐','🧘'],
+  ['journal','此刻','🪷'],['bell','铃','🔔']
+];
+function buildNav(){
+  const n=document.getElementById('nav');
+  n.innerHTML=NAVS.map(([id,l,ic])=>`<div class="nav-btn" data-nav="${id}"><div class="ni">${ic}</div><div class="nl">${l}</div></div>`).join('');
+  n.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>go(b.dataset.nav));
+}
+let cur='home';
+function go(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  document.getElementById('v-'+id).classList.add('on');
+  document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('on',b.dataset.nav===id));
+  document.body.classList.toggle('breathe-mode',id==='breath'||id==='meditate');
+  window.scrollTo(0,0);
+  if(cur==='breath')stopBreath();
+  if(cur==='meditate')stopMed(true);
+  cur=id;
+  if(id==='journal')renderJournal();
+  if(id==='home')renderHome();
+}
+document.querySelectorAll('[data-go]').forEach(c=>c.onclick=()=>go(c.dataset.go));
+document.querySelectorAll('[data-back]').forEach(b=>b.onclick=()=>go('home'));
+
+/* ============ clock + greeting ============ */
+function pad(n){return String(n).padStart(2,'0')}
+function updClock(){
+  const d=new Date();
+  document.getElementById('clock').textContent=`${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  const h=d.getHours();
+  let g='此刻安好';
+  if(h<5)g='夜深了，让呼吸慢下来';else if(h<9)g='清晨 · 温柔地醒来';
+  else if(h<12)g='上午 · 专注在眼前';else if(h<14)g='正午 · 停一停，喝口水';
+  else if(h<18)g='午后 · 回到身体里';else if(h<22)g='入夜 · 让白日沉淀';else g='深夜 · 与自己安静相处';
+  document.getElementById('greet').textContent=g;
+}
+setInterval(updClock,10000);updClock();
+
+/* ============ quotes ============ */
+const QUOTES=[
+  ['此刻，就是你唯一拥有的时间。',''],
+  ['你无法踏入同一条河流两次，因为它一直在流动。','— 赫拉克利特'],
+  ['过去已逝，未来未至；生命只发生在当下这一刻。','— 一行禅师'],
+  ['当你吃饭时，就只是吃饭；当你走路时，就只是走路。','— 禅语'],
+  ['如果你感到焦虑，你活在未来；如果你感到抑郁，你活在过去。','— 老子（传）'],
+  ['把注意力带回呼吸，你就回到了家。','— 一行禅师'],
+  ['奇迹不是在水上行走，而是在此刻的大地上行走。','— 一行禅师'],
+  ['你所寻找的平静，此刻就在你之内。',''],
+  ['放下不是失去，而是腾出手来，握住当下。',''],
+  ['每一次呼吸，都是一次重新开始的机会。',''],
+  ['慢下来，世界并不会因此崩塌。',''],
+  ['注意此刻的声音——那是生命正在发生。','']
+];
+function newQuote(){
+  const [q,a]=QUOTES[Math.floor(Math.random()*QUOTES.length)];
+  document.getElementById('quote').textContent=q;
+  document.getElementById('quoteA').textContent=a;
+}
+document.getElementById('qRefresh').onclick=newQuote;
+
+/* ============ stats ============ */
+function todayKey(){const d=new Date();return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}
+function logSession(){
+  DB.set('total',(DB.get('total',0))+1);
+  const days=DB.get('days',[]);const t=todayKey();
+  if(!days.includes(t)){days.push(t);DB.set('days',days)}
+  computeStreak();
+}
+function computeStreak(){
+  const days=DB.get('days',[]).slice().sort();
+  let streak=0;const d=new Date();
+  for(;;){
+    const k=`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+    if(days.includes(k)){streak++;d.setDate(d.getDate()-1)}
+    else if(streak===0 && k===todayKey()){d.setDate(d.getDate()-1)} // allow today not yet done
+    else break;
+  }
+  return streak;
+}
+function renderHome(){
+  document.getElementById('stTotal').textContent=DB.get('total',0);
+  document.getElementById('stStreak').textContent=computeStreak();
+}
+
+/* ============ BREATH ============ */
+const PATTERNS={
+  '4-4-4-4':{name:'方箱',seq:[['吸气',4],['屏息',4],['呼气',4],['屏息',4]],desc:'平静专注 · 吸4·停4·呼4·停4'},
+  '4-7-8':{name:'助眠',seq:[['吸气',4],['屏息',7],['呼气',8]],desc:'放松入睡 · 吸4·停7·呼8'},
+  '4-0-6':{name:'舒缓',seq:[['吸气',4],['呼气',6]],desc:'安抚神经 · 吸4·呼6'},
+  '5-0-5':{name:'自然',seq:[['吸气',5],['呼气',5]],desc:'匀速平衡 · 吸5·呼5'}
+};
+let bp='4-4-4-4',breathTimer=null,breathRunning=false,breathN=0;
+function buildPatterns(){
+  const r=document.getElementById('patternRow');
+  r.innerHTML=Object.keys(PATTERNS).map(k=>`<div class="chip${k===bp?' on':''}" data-bp="${k}">${PATTERNS[k].name}</div>`).join('');
+  r.querySelectorAll('[data-bp]').forEach(c=>c.onclick=()=>{
+    if(breathRunning)return;
+    bp=c.dataset.bp;buildPatterns();document.getElementById('patternDesc').textContent=PATTERNS[bp].desc;
+  });
+  document.getElementById('patternDesc').textContent=PATTERNS[bp].desc;
+}
+function runBreathCycle(){
+  const seq=PATTERNS[bp].seq;let i=0;
+  const orb=document.getElementById('orb'),txt=document.getElementById('orbTxt');
+  function step(){
+    if(!breathRunning)return;
+    const [label,secs]=seq[i];
+    txt.textContent=label;
+    // orb scale target
+    let target=0.62;
+    if(label==='吸气')target=1;
+    else if(label==='呼气')target=0.62;
+    else target=orb._last||0.62; // hold keeps current
+    orb._last=target;
+    orb.style.transition=`transform ${secs}s ease-in-out`;
+    orb.style.transform=`scale(${target})`;
+    if(label==='吸气')bowl(300,1.2,.18);
+    if(i===seq.length-1){breathN++;document.getElementById('breathCount').textContent=`— 呼吸 ${breathN} 次 —`}
+    breathTimer=setTimeout(()=>{i=(i+1)%seq.length;step()},secs*1000);
+  }
+  step();
+}
+function startBreath(){
+  ac();breathRunning=true;breathN=0;
+  document.getElementById('breathStart').textContent='结束';
+  document.getElementById('breathCount').textContent='— 呼吸 0 次 —';
+  runBreathCycle();
+}
+function stopBreath(){
+  if(!breathRunning){return}
+  breathRunning=false;clearTimeout(breathTimer);
+  document.getElementById('breathStart').textContent='开始';
+  const orb=document.getElementById('orb');orb.style.transition='transform 1.2s ease';orb.style.transform='scale(.62)';
+  document.getElementById('orbTxt').textContent='准备好了吗';
+  if(breathN>=2){logSession();toast(`很好，你完成了 ${breathN} 次呼吸`)}
+}
+document.getElementById('breathStart').onclick=()=>breathRunning?stopBreath():startBreath();
+
+/* ============ GROUND 5-4-3-2-1 ============ */
+const GSTEPS=[
+  [5,'看见','找出你此刻能<b>看见</b>的 5 样东西','它们的颜色、形状、光影…'],
+  [4,'触碰','留意你此刻能<b>触碰</b>到的 4 种触感','衣物、座椅、空气的温度…'],
+  [3,'听见','捕捉你此刻能<b>听见</b>的 3 种声音','远处、近处、你的呼吸…'],
+  [2,'闻到','分辨你此刻能<b>闻到</b>的 2 种气味','空气、茶、皮肤…'],
+  [1,'尝到','感受你此刻能<b>尝到</b>的 1 种味道','或只是口腔的感觉']
+];
+let gi=0;
+function renderGround(){
+  const [n,s,q,ph]=GSTEPS[gi];
+  document.getElementById('gN').textContent=n;
+  document.getElementById('gSense').textContent=s;
+  document.getElementById('gQ').innerHTML=q;
+  const inp=document.getElementById('gInput');inp.value='';inp.placeholder=ph;
+  const dots=document.getElementById('groundDots');
+  dots.innerHTML=GSTEPS.map((_,i)=>`<i class="${i<=gi?'on':''}"></i>`).join('');
+  document.getElementById('gPrev').style.visibility=gi===0?'hidden':'visible';
+  document.getElementById('gNext').textContent=gi===GSTEPS.length-1?'完成 ✓':'下一步 ›';
+}
+document.getElementById('gNext').onclick=()=>{
+  if(gi<GSTEPS.length-1){gi++;renderGround();tick()}
+  else{logSession();toast('你已回到此刻 · 做得好');gi=0;go('home')}
+};
+document.getElementById('gPrev').onclick=()=>{if(gi>0){gi--;renderGround()}};
+
+/* ============ MEDITATE ============ */
+const DURS=[3,5,10,15,20];
+let medDur=5,medLeft=0,medTimer=null,medRunning=false;
+function buildDurs(){
+  document.getElementById('durRow').innerHTML=DURS.map(d=>`<div class="chip${d===medDur?' on':''}" data-dur="${d}">${d} 分钟</div>`).join('');
+  document.querySelectorAll('[data-dur]').forEach(c=>c.onclick=()=>{
+    if(medRunning)return;medDur=+c.dataset.dur;buildDurs();setMedDisp(medDur*60)
+  });
+}
+function setMedDisp(sec){
+  document.getElementById('timerTxt').textContent=`${pad(Math.floor(sec/60))}:${pad(sec%60)}`;
+}
+function medArc(frac){document.getElementById('timerArc').style.strokeDashoffset=628*(1-frac)}
+function startMed(){
+  ac();bowl(300,3.6,.5);medRunning=true;medLeft=medDur*60;const total=medLeft;
+  document.getElementById('medStart').textContent='结束';
+  document.getElementById('timerState').textContent='安坐中…';
+  setMedDisp(medLeft);medArc(0);
+  medTimer=setInterval(()=>{
+    medLeft--;setMedDisp(Math.max(medLeft,0));medArc((total-medLeft)/total);
+    if(medLeft<=0){finishMed()}
+  },1000);
+}
+function finishMed(){
+  clearInterval(medTimer);medRunning=false;
+  bowl(280,4.2,.55);setTimeout(()=>bowl(280,4,.4),700);
+  document.getElementById('medStart').textContent='开始';
+  document.getElementById('timerState').textContent='圆满';
+  logSession();toast('静坐圆满 · 带着这份安定继续');
+  setTimeout(()=>{document.getElementById('timerState').textContent='选择时长';setMedDisp(medDur*60);medArc(0)},4000);
+}
+function stopMed(silent){
+  if(!medRunning)return;clearInterval(medTimer);medRunning=false;
+  document.getElementById('medStart').textContent='开始';
+  document.getElementById('timerState').textContent='选择时长';
+  setMedDisp(medDur*60);medArc(0);
+  if(!silent){if(medDur*60-medLeft>60){logSession()}toast('已停止')}
+}
+document.getElementById('medStart').onclick=()=>medRunning?stopMed():startMed();
+
+/* ============ JOURNAL ============ */
+const JPROMPTS=['你此刻的身体，有什么感觉？','窗外或身边，正在发生什么？','此刻你听见的最清晰的声音是？','让你此刻还能安坐于此的一件小事？','如果这一刻会消失，你想记住什么？','此刻你的呼吸，是深还是浅？','你此刻能感激的一件小事？'];
+function renderJournal(){
+  document.getElementById('jrnlPrompt').textContent='· '+JPROMPTS[Math.floor(Math.random()*JPROMPTS.length)];
+  const list=DB.get('journal',[]);
+  const el=document.getElementById('jrnlList');
+  if(!list.length){el.innerHTML='<div class="empty">还没有记录 · 留下第一个此刻</div>';return}
+  el.innerHTML=list.slice().reverse().map(it=>`
+    <div class="jrnl-item">
+      <div class="m">${esc(it.m)}</div>
+      <div class="tm"><span>${it.t}</span><span class="del" data-del="${it.id}">删除</span></div>
+    </div>`).join('');
+  el.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
+    let l=DB.get('journal',[]).filter(x=>x.id!=b.dataset.del);DB.set('journal',l);renderJournal();
+  });
+}
+function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+document.getElementById('jrnlSave').onclick=()=>{
+  const ta=document.getElementById('jrnlText');const v=ta.value.trim();
+  if(!v){toast('写下一点点也好');return}
+  const d=new Date();const t=`${d.getMonth()+1}月${d.getDate()}日 ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  const l=DB.get('journal',[]);l.push({id:Date.now(),m:v,t});DB.set('journal',l);
+  ta.value='';logSession();toast('此刻已留存 🪷');renderJournal();
+};
+
+/* ============ BELL ============ */
+const BELL_INTERVALS=[['随机',0],['每 15 分',15],['每 30 分',30],['每 60 分',60]];
+let bellOn=false,bellIv=0,bellTimer=null,bellNextAt=0;
+function buildBell(){
+  document.getElementById('bellRow').innerHTML=BELL_INTERVALS.map(([l,v])=>`<div class="chip${v===bellIv?' on':''}" data-biv="${v}">${l}</div>`).join('');
+  document.querySelectorAll('[data-biv]').forEach(c=>c.onclick=()=>{bellIv=+c.dataset.biv;buildBell();if(bellOn){scheduleBell()}});
+}
+function nextDelay(){return bellIv?bellIv*60000:(Math.floor(Math.random()*10)+8)*60000} // random 8-17 min
+function scheduleBell(){
+  clearTimeout(bellTimer);
+  const d=nextDelay();bellNextAt=Date.now()+d;
+  bellTimer=setTimeout(()=>{bowl(320,4,.5);toast('🔔 回到此刻 · 深呼吸一次');scheduleBell()},d);
+  updBellStatus();
+}
+function updBellStatus(){
+  document.getElementById('bellStatus').textContent=bellOn?'✓ 正念铃已开启':'铃声未开启';
+  if(bellOn){
+    const mins=Math.max(1,Math.round((bellNextAt-Date.now())/60000));
+    document.getElementById('bellNext').textContent=`约 ${mins} 分钟后轻响一次 · 请保持此页开启`;
+  }else{
+    document.getElementById('bellNext').textContent='开启后，将每隔一段时间轻响一次';
+  }
+}
+document.getElementById('bellToggle').onclick=()=>{
+  bellOn=!bellOn;ac();
+  document.getElementById('bellToggle').textContent=bellOn?'关闭':'开启';
+  if(bellOn){scheduleBell();toast('正念铃已开启')}else{clearTimeout(bellTimer);updBellStatus()}
+};
+document.getElementById('bellTest').onclick=()=>{ac();bowl(320,4,.5)};
+setInterval(()=>{if(bellOn)updBellStatus()},20000);
+
+/* ============ init ============ */
+buildNav();buildPatterns();buildDurs();buildBell();newQuote();renderHome();setMedDisp(medDur*60);renderGround();
+document.querySelector('[data-nav="home"]').classList.add('on');
+// resume audio on first touch
+document.body.addEventListener('touchstart',()=>ac(),{once:true});
+document.body.addEventListener('click',()=>ac(),{once:true});
+</script>
+</body>
+</html>
