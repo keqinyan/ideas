@@ -174,7 +174,7 @@ body.breathe-mode{
   <!-- HOME -->
   <div class="view on" id="v-home">
     <div class="hero">
-      <span class="refresh" id="qRefresh">↻ 换一句</span>
+      <span class="refresh" id="qRefresh" data-act="quote">↻ 换一句</span>
       <div class="q" id="quote">此刻，就是你唯一拥有的时间。</div>
       <div class="qa" id="quoteA"></div>
     </div>
@@ -221,7 +221,7 @@ body.breathe-mode{
       <div class="breath-count" id="breathCount">— 呼吸 0 次 —</div>
     </div>
     <div class="btn-row">
-      <button class="btn solid" id="breathStart">开始</button>
+      <button class="btn solid" id="breathStart" data-act="breathToggle">开始</button>
     </div>
   </div>
 
@@ -238,8 +238,8 @@ body.breathe-mode{
       <input class="ground-input" id="gInput" placeholder="慢慢说出，或写下来…" autocomplete="off">
     </div>
     <div class="btn-row">
-      <button class="btn ghost" id="gPrev">上一步</button>
-      <button class="btn solid" id="gNext">下一步 ›</button>
+      <button class="btn ghost" id="gPrev" data-act="gPrev">上一步</button>
+      <button class="btn solid" id="gNext" data-act="gNext">下一步 ›</button>
     </div>
   </div>
 
@@ -258,7 +258,7 @@ body.breathe-mode{
     </div>
     <div class="dur-row" id="durRow"></div>
     <div class="btn-row">
-      <button class="btn solid" id="medStart">开始</button>
+      <button class="btn solid" id="medStart" data-act="medToggle">开始</button>
     </div>
   </div>
 
@@ -272,7 +272,7 @@ body.breathe-mode{
       <textarea id="jrnlText" placeholder="一个声音、一缕光、一次呼吸、一种感受…"></textarea>
     </div>
     <div class="btn-row">
-      <button class="btn solid" id="jrnlSave">留下此刻</button>
+      <button class="btn solid" id="jrnlSave" data-act="jrnlSave">留下此刻</button>
     </div>
     <div class="jrnl-list" id="jrnlList"></div>
   </div>
@@ -287,8 +287,8 @@ body.breathe-mode{
       <div class="bell-status" id="bellStatus">铃声未开启</div>
       <div class="bell-next" id="bellNext">开启后，将每隔一段时间轻响一次</div>
       <div class="btn-row" style="margin-top:6px">
-        <button class="btn solid" id="bellToggle">开启</button>
-        <button class="btn ghost" id="bellTest">试听</button>
+        <button class="btn solid" id="bellToggle" data-act="bellToggle">开启</button>
+        <button class="btn ghost" id="bellTest" data-act="bellTest">试听</button>
       </div>
       <div class="pattern-desc" style="margin-top:14px">保持此页开启即可 · 每次响起时，停下，深呼吸一次，问自己：<br>「我此刻在哪里？」</div>
     </div>
@@ -309,9 +309,9 @@ function toast(m){const t=document.getElementById('toast');t.textContent=m;t.cla
 
 /* ============ audio (bowl / bell) ============ */
 let AC;
-function ac(){if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();return AC}
+function ac(){try{if(!AC){const K=window.AudioContext||window.webkitAudioContext;if(!K)return null;AC=new K()}if(AC.state==='suspended')AC.resume()}catch(e){}return AC}
 function bowl(freq=340,dur=3.4,vol=.5){
-  const c=ac(),t=c.currentTime;
+  const c=ac();if(!c)return;const t=c.currentTime;
   [1,2.02,2.97,4.1].forEach((h,i)=>{
     const o=c.createOscillator(),g=c.createGain();
     o.type='sine';o.frequency.value=freq*h;
@@ -331,7 +331,6 @@ const NAVS=[
 function buildNav(){
   const n=document.getElementById('nav');
   n.innerHTML=NAVS.map(([id,l,ic])=>`<div class="nav-btn" data-nav="${id}"><div class="ni">${ic}</div><div class="nl">${l}</div></div>`).join('');
-  n.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>go(b.dataset.nav));
 }
 let cur='home';
 function go(id){
@@ -346,8 +345,6 @@ function go(id){
   if(id==='journal')renderJournal();
   if(id==='home')renderHome();
 }
-document.querySelectorAll('[data-go]').forEach(c=>c.onclick=()=>go(c.dataset.go));
-document.querySelectorAll('[data-back]').forEach(b=>b.onclick=()=>go('home'));
 
 /* ============ clock + greeting ============ */
 function pad(n){return String(n).padStart(2,'0')}
@@ -383,7 +380,6 @@ function newQuote(){
   document.getElementById('quote').textContent=q;
   document.getElementById('quoteA').textContent=a;
 }
-document.getElementById('qRefresh').onclick=newQuote;
 
 /* ============ stats ============ */
 function todayKey(){const d=new Date();return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`}
@@ -420,10 +416,6 @@ let bp='4-4-4-4',breathTimer=null,breathRunning=false,breathN=0;
 function buildPatterns(){
   const r=document.getElementById('patternRow');
   r.innerHTML=Object.keys(PATTERNS).map(k=>`<div class="chip${k===bp?' on':''}" data-bp="${k}">${PATTERNS[k].name}</div>`).join('');
-  r.querySelectorAll('[data-bp]').forEach(c=>c.onclick=()=>{
-    if(breathRunning)return;
-    bp=c.dataset.bp;buildPatterns();document.getElementById('patternDesc').textContent=PATTERNS[bp].desc;
-  });
   document.getElementById('patternDesc').textContent=PATTERNS[bp].desc;
 }
 function runBreathCycle(){
@@ -461,7 +453,6 @@ function stopBreath(){
   document.getElementById('orbTxt').textContent='准备好了吗';
   if(breathN>=2){logSession();toast(`很好，你完成了 ${breathN} 次呼吸`)}
 }
-document.getElementById('breathStart').onclick=()=>breathRunning?stopBreath():startBreath();
 
 /* ============ GROUND 5-4-3-2-1 ============ */
 const GSTEPS=[
@@ -483,20 +474,12 @@ function renderGround(){
   document.getElementById('gPrev').style.visibility=gi===0?'hidden':'visible';
   document.getElementById('gNext').textContent=gi===GSTEPS.length-1?'完成 ✓':'下一步 ›';
 }
-document.getElementById('gNext').onclick=()=>{
-  if(gi<GSTEPS.length-1){gi++;renderGround();tick()}
-  else{logSession();toast('你已回到此刻 · 做得好');gi=0;go('home')}
-};
-document.getElementById('gPrev').onclick=()=>{if(gi>0){gi--;renderGround()}};
 
 /* ============ MEDITATE ============ */
 const DURS=[3,5,10,15,20];
 let medDur=5,medLeft=0,medTimer=null,medRunning=false;
 function buildDurs(){
   document.getElementById('durRow').innerHTML=DURS.map(d=>`<div class="chip${d===medDur?' on':''}" data-dur="${d}">${d} 分钟</div>`).join('');
-  document.querySelectorAll('[data-dur]').forEach(c=>c.onclick=()=>{
-    if(medRunning)return;medDur=+c.dataset.dur;buildDurs();setMedDisp(medDur*60)
-  });
 }
 function setMedDisp(sec){
   document.getElementById('timerTxt').textContent=`${pad(Math.floor(sec/60))}:${pad(sec%60)}`;
@@ -527,7 +510,6 @@ function stopMed(silent){
   setMedDisp(medDur*60);medArc(0);
   if(!silent){if(medDur*60-medLeft>60){logSession()}toast('已停止')}
 }
-document.getElementById('medStart').onclick=()=>medRunning?stopMed():startMed();
 
 /* ============ JOURNAL ============ */
 const JPROMPTS=['你此刻的身体，有什么感觉？','窗外或身边，正在发生什么？','此刻你听见的最清晰的声音是？','让你此刻还能安坐于此的一件小事？','如果这一刻会消失，你想记住什么？','此刻你的呼吸，是深还是浅？','你此刻能感激的一件小事？'];
@@ -541,25 +523,21 @@ function renderJournal(){
       <div class="m">${esc(it.m)}</div>
       <div class="tm"><span>${it.t}</span><span class="del" data-del="${it.id}">删除</span></div>
     </div>`).join('');
-  el.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
-    let l=DB.get('journal',[]).filter(x=>x.id!=b.dataset.del);DB.set('journal',l);renderJournal();
-  });
 }
 function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
-document.getElementById('jrnlSave').onclick=()=>{
+function doJrnlSave(){
   const ta=document.getElementById('jrnlText');const v=ta.value.trim();
   if(!v){toast('写下一点点也好');return}
   const d=new Date();const t=`${d.getMonth()+1}月${d.getDate()}日 ${pad(d.getHours())}:${pad(d.getMinutes())}`;
   const l=DB.get('journal',[]);l.push({id:Date.now(),m:v,t});DB.set('journal',l);
   ta.value='';logSession();toast('此刻已留存 🪷');renderJournal();
-};
+}
 
 /* ============ BELL ============ */
 const BELL_INTERVALS=[['随机',0],['每 15 分',15],['每 30 分',30],['每 60 分',60]];
 let bellOn=false,bellIv=0,bellTimer=null,bellNextAt=0;
 function buildBell(){
   document.getElementById('bellRow').innerHTML=BELL_INTERVALS.map(([l,v])=>`<div class="chip${v===bellIv?' on':''}" data-biv="${v}">${l}</div>`).join('');
-  document.querySelectorAll('[data-biv]').forEach(c=>c.onclick=()=>{bellIv=+c.dataset.biv;buildBell();if(bellOn){scheduleBell()}});
 }
 function nextDelay(){return bellIv?bellIv*60000:(Math.floor(Math.random()*10)+8)*60000} // random 8-17 min
 function scheduleBell(){
@@ -577,20 +555,58 @@ function updBellStatus(){
     document.getElementById('bellNext').textContent='开启后，将每隔一段时间轻响一次';
   }
 }
-document.getElementById('bellToggle').onclick=()=>{
+function doBellToggle(){
   bellOn=!bellOn;ac();
   document.getElementById('bellToggle').textContent=bellOn?'关闭':'开启';
   if(bellOn){scheduleBell();toast('正念铃已开启')}else{clearTimeout(bellTimer);updBellStatus()}
-};
-document.getElementById('bellTest').onclick=()=>{ac();bowl(320,4,.5)};
+}
 setInterval(()=>{if(bellOn)updBellStatus()},20000);
+
+/* ============ init ============ */
+/* ============ central dispatch (robust click + touch for all devices) ============ */
+const ACT={
+  quote:newQuote,
+  breathToggle:()=>breathRunning?stopBreath():startBreath(),
+  gNext:()=>{ if(gi<GSTEPS.length-1){gi++;renderGround();tick()} else{logSession();toast('你已回到此刻 · 做得好');gi=0;go('home')} },
+  gPrev:()=>{ if(gi>0){gi--;renderGround()} },
+  medToggle:()=>medRunning?stopMed():startMed(),
+  jrnlSave:doJrnlSave,
+  bellToggle:doBellToggle,
+  bellTest:()=>{bowl(320,4,.5)}
+};
+function dispatch(el){
+  if(!el||!el.closest)return false;
+  const a=el.closest('[data-go],[data-nav],[data-back],[data-bp],[data-dur],[data-biv],[data-del],[data-act]');
+  if(!a)return false;
+  ac(); // unlock/resume audio within the user gesture
+  const d=a.dataset;
+  if(d.go){go(d.go)}
+  else if(d.nav){go(d.nav)}
+  else if(a.hasAttribute('data-back')){go('home')}
+  else if(a.hasAttribute('data-bp')){if(!breathRunning){bp=d.bp;buildPatterns()}}
+  else if(a.hasAttribute('data-dur')){if(!medRunning){medDur=+d.dur;buildDurs();setMedDisp(medDur*60)}}
+  else if(a.hasAttribute('data-biv')){bellIv=+d.biv;buildBell();if(bellOn)scheduleBell()}
+  else if(a.hasAttribute('data-del')){const l=DB.get('journal',[]).filter(x=>x.id!=d.del);DB.set('journal',l);renderJournal()}
+  else if(d.act){if(ACT[d.act])ACT[d.act]()}
+  return true;
+}
+let _tStart=null,_handledAt=0;
+document.addEventListener('touchstart',e=>{const t=e.changedTouches[0];_tStart={x:t.clientX,y:t.clientY}},{passive:true});
+document.addEventListener('touchend',e=>{
+  if(!_tStart)return;const t=e.changedTouches[0];
+  const moved=Math.abs(t.clientX-_tStart.x)>12||Math.abs(t.clientY-_tStart.y)>12;
+  _tStart=null;if(moved)return;
+  const el=document.elementFromPoint(t.clientX,t.clientY)||e.target;
+  if(dispatch(el)){e.preventDefault();_handledAt=Date.now()} // suppress the emulated click
+},{passive:false});
+document.addEventListener('click',e=>{
+  if(Date.now()-_handledAt<600)return; // already handled by touchend
+  dispatch(e.target);
+});
 
 /* ============ init ============ */
 buildNav();buildPatterns();buildDurs();buildBell();newQuote();renderHome();setMedDisp(medDur*60);renderGround();
 document.querySelector('[data-nav="home"]').classList.add('on');
-// resume audio on first touch
-document.body.addEventListener('touchstart',()=>ac(),{once:true});
-document.body.addEventListener('click',()=>ac(),{once:true});
 </script>
 </body>
 </html>
