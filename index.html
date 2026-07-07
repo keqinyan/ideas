@@ -6,9 +6,16 @@
 <meta name="theme-color" content="#0f1720">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="此刻">
+<meta name="description" content="帮助你回到当下的正念小应用：呼吸、着陆、静坐、此刻记录与正念铃。">
 <title>此刻 · 活在当下</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="icon" href="./icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500&family=Ma+Shan+Zheng&display=swap">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500&family=Ma+Shan+Zheng&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
   --bg0:#0b1016;--bg1:#131c26;
@@ -182,6 +189,9 @@ body.breathe-mode{
       <span>已练习 <b id="stTotal">0</b> 次</span>
       <span>连续 <b id="stStreak">0</b> 天</span>
     </div>
+    <div id="installBar" style="display:none;text-align:center;margin:6px 0 14px">
+      <button class="btn" id="installBtn" data-act="install">＋ 安装到主屏幕</button>
+    </div>
     <div class="grid">
       <div class="card" data-go="breath">
         <div class="ic">🫧</div>
@@ -290,7 +300,7 @@ body.breathe-mode{
         <button class="btn solid" id="bellToggle" data-act="bellToggle">开启</button>
         <button class="btn ghost" id="bellTest" data-act="bellTest">试听</button>
       </div>
-      <div class="pattern-desc" style="margin-top:14px">保持此页开启即可 · 每次响起时，停下，深呼吸一次，问自己：<br>「我此刻在哪里？」</div>
+      <div class="pattern-desc" style="margin-top:14px">开启后会弹出系统通知（需允许通知权限），应用切到后台也能提醒。<br>每次响起时，停下，深呼吸一次，问自己：「我此刻在哪里？」</div>
     </div>
   </div>
 </div>
@@ -540,10 +550,19 @@ function buildBell(){
   document.getElementById('bellRow').innerHTML=BELL_INTERVALS.map(([l,v])=>`<div class="chip${v===bellIv?' on':''}" data-biv="${v}">${l}</div>`).join('');
 }
 function nextDelay(){return bellIv?bellIv*60000:(Math.floor(Math.random()*10)+8)*60000} // random 8-17 min
+function notifyBell(){
+  try{
+    if(!('Notification' in window)||Notification.permission!=='granted')return;
+    const body='停下，深呼吸一次 · 我此刻在哪里？';
+    if(navigator.serviceWorker&&navigator.serviceWorker.ready){
+      navigator.serviceWorker.ready.then(reg=>reg.showNotification('🔔 回到此刻',{body,icon:'./icon-192.png',badge:'./icon-192.png',tag:'ck-bell',renotify:true})).catch(()=>{});
+    }else{new Notification('🔔 回到此刻',{body,icon:'./icon-192.png'});}
+  }catch(e){}
+}
 function scheduleBell(){
   clearTimeout(bellTimer);
   const d=nextDelay();bellNextAt=Date.now()+d;
-  bellTimer=setTimeout(()=>{bowl(320,4,.5);toast('🔔 回到此刻 · 深呼吸一次');scheduleBell()},d);
+  bellTimer=setTimeout(()=>{bowl(320,4,.5);toast('🔔 回到此刻 · 深呼吸一次');notifyBell();scheduleBell()},d);
   updBellStatus();
 }
 function updBellStatus(){
@@ -558,7 +577,10 @@ function updBellStatus(){
 function doBellToggle(){
   bellOn=!bellOn;ac();
   document.getElementById('bellToggle').textContent=bellOn?'关闭':'开启';
-  if(bellOn){scheduleBell();toast('正念铃已开启')}else{clearTimeout(bellTimer);updBellStatus()}
+  if(bellOn){
+    if('Notification' in window && Notification.permission==='default'){Notification.requestPermission().catch(()=>{})}
+    scheduleBell();toast('正念铃已开启')
+  }else{clearTimeout(bellTimer);updBellStatus()}
 }
 setInterval(()=>{if(bellOn)updBellStatus()},20000);
 
@@ -572,8 +594,21 @@ const ACT={
   medToggle:()=>medRunning?stopMed():startMed(),
   jrnlSave:doJrnlSave,
   bellToggle:doBellToggle,
-  bellTest:()=>{bowl(320,4,.5)}
+  bellTest:()=>{bowl(320,4,.5)},
+  install:doInstall
 };
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();deferredPrompt=e;
+  const bar=document.getElementById('installBar');if(bar)bar.style.display='block';
+});
+window.addEventListener('appinstalled',()=>{deferredPrompt=null;const bar=document.getElementById('installBar');if(bar)bar.style.display='none';toast('已安装 · 从主屏幕打开我吧')});
+async function doInstall(){
+  if(!deferredPrompt){toast('在浏览器菜单里选「添加到主屏幕」即可');return}
+  deferredPrompt.prompt();
+  try{await deferredPrompt.userChoice}catch(e){}
+  deferredPrompt=null;const bar=document.getElementById('installBar');if(bar)bar.style.display='none';
+}
 function dispatch(el){
   if(!el||!el.closest)return false;
   const a=el.closest('[data-go],[data-nav],[data-back],[data-bp],[data-dur],[data-biv],[data-del],[data-act]');
@@ -603,6 +638,11 @@ document.addEventListener('click',e=>{
   if(Date.now()-_handledAt<600)return; // already handled by touchend
   dispatch(e.target);
 });
+
+/* ============ pwa: service worker ============ */
+if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
 
 /* ============ init ============ */
 buildNav();buildPatterns();buildDurs();buildBell();newQuote();renderHome();setMedDisp(medDur*60);renderGround();
